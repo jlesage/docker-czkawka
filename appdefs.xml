@@ -1,0 +1,51 @@
+<!--
+Definitions for Czkawka docker container.
+
+This file is used as data source to generate README.md and unRAID template files
+from Jinja2 templates.
+-->
+<defs>
+  <app>
+    <id>21</id>
+    <gui_type>x11</gui_type>
+    <friendly_name>Czkawka</friendly_name>
+    <name>{{ defs.app.friendly_name|lower|replace(' ', '-') }}</name>
+    <project>
+      <description>
+Czkawka is written in Rust, simple, fast and easy to use app to remove
+unnecessary files from your computer.
+      </description>
+      <url>https://github.com/qarmin/czkawka</url>
+    </project>
+    <unraid>
+      <support_url>https://forums.unraid.net/topic/101459-support-czkawka/</support_url>
+      <category>Tools:</category>
+    </unraid>
+    <container>
+      <rough_download_size>200MB</rough_download_size>
+      <storage_permissions>rw</storage_permissions>
+    </container>
+    <!-- Extra stuff to be added to the documentation. -->
+    <documentation/>
+    <!-- Changelog of the application. -->
+    <history>
+      <release>
+        <version>1.0.0</version>
+        <date>2021-01-15</date>
+        <change>Initial release.</change>
+      </release>
+    </history>
+  </app>
+  <container>
+    <!-- Environment variables -->
+    <environment_variables/>
+    <!-- Volumes -->
+    <volumes/>
+    <!-- Network ports -->
+    <ports/>
+    <!-- Devices -->
+    <devices/>
+    <!-- Extra parameters -->
+    <extra_params/>
+  </container>
+</defs>
