@@ -49,7 +49,9 @@ RUN \
     echo "lto = true" >> Cargo.toml && \
     cargo build --release && \
     # Install.
+    strip target/release/czkawka_cli && \
     strip target/release/czkawka_gui && \
+    cp -av target/release/czkawka_cli /usr/bin/ && \
     cp -av target/release/czkawka_gui /usr/bin/ && \
     cd .. && \
     # Cleanup.
