@@ -1,5 +1,5 @@
 # Docker container for Czkawka
-[![Docker Image Size](https://img.shields.io/microbadger/image-size/jlesage/czkawka)](http://microbadger.com/#/images/jlesage/czkawka) [![Build Status](https://drone.le-sage.com/api/badges/jlesage/docker-czkawka/status.svg)](https://drone.le-sage.com/jlesage/docker-czkawka) [![GitHub Release](https://img.shields.io/github/release/jlesage/docker-czkawka.svg)](https://github.com/jlesage/docker-czkawka/releases/latest) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/JocelynLeSage/0usd)
+[![Docker Image Size](https://img.shields.io/docker/image-size/jlesage/czkawka/latest)](https://hub.docker.com/r/jlesage/czkawka/tags) [![Build Status](https://drone.le-sage.com/api/badges/jlesage/docker-czkawka/status.svg)](https://drone.le-sage.com/jlesage/docker-czkawka) [![GitHub Release](https://img.shields.io/github/release/jlesage/docker-czkawka.svg)](https://github.com/jlesage/docker-czkawka/releases/latest) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/JocelynLeSage/0usd)
 
 This is a Docker container for [Czkawka](https://github.com/qarmin/czkawka).
 
