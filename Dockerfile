@@ -82,6 +82,7 @@ ENV APP_NAME="Czkawka"
 # Define mountable directories.
 VOLUME ["/config"]
 VOLUME ["/storage"]
+VOLUME ["/trash"]
 
 # Metadata.
 LABEL \

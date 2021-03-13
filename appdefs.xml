@@ -51,7 +51,22 @@ unnecessary files from your computer.
     <!-- Environment variables -->
     <environment_variables/>
     <!-- Volumes -->
-    <volumes/>
+    <volumes>
+      <volume>
+        <container_path>/trash</container_path>
+        <host_path_example/>
+        <description>This is where duplicated files are moved when they are sent to trash.  Usage of the trash is optional.</description>
+        <permissions>rw</permissions>
+        <unraid_template>
+          <title>Trash</title>
+          <description>This is where duplicated files are moved files when they are sent to trash.  Usage of the trash is optional.[br]Container path: /trash</description>
+          <default/>
+          <display>always-hide</display>
+          <required>false</required>
+          <mask>false</mask>
+        </unraid_template>
+      </volume>
+    </volumes>
     <!-- Network ports -->
     <ports/>
     <!-- Devices -->

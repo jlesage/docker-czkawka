@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# The gio binary is used for sending files to trash.  This script intercept the
+# trash functionality so it can work in a Docker environment.
+#
+# Note that this script must be located under /usr/local/bin, a path with a
+# higher priority than /usr/bin (the original location of gio).
+#
+
+if [ "${1:-}" = "trash" ]; then
+    # Intercept the trash functionality.
+    shift
+    mv "$@" /trash/
+else
+    exec /usr/bin/gio "$@"
+fi
