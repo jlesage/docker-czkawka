@@ -11,7 +11,7 @@ FROM jlesage/baseimage-gui:alpine-3.12-v3.5.6
 ARG DOCKER_IMAGE_VERSION=unknown
 
 # Define software versions.
-ARG CZKAWKA_VERSION=2.4.0
+ARG CZKAWKA_VERSION=3.0.0
 
 # Define software download URLs.
 ARG CZKAWKA_URL=https://github.com/qarmin/czkawka/archive/${CZKAWKA_VERSION}.tar.gz
@@ -47,6 +47,8 @@ RUN \
     echo "[profile.release]" >> Cargo.toml && \
     echo "opt-level = 'z'" >> Cargo.toml && \
     echo "lto = true" >> Cargo.toml && \
+    sed-patch 's|settings-app-symbolic|applications-system|' czkawka_gui/czkawka.glade && \
+    sed-patch 's|<property name="show-close-button">True</property>|<property name="show-close-button">False</property>|' czkawka_gui/czkawka.glade && \
     cargo build --release && \
     # Install.
     strip target/release/czkawka_cli && \
@@ -57,6 +59,14 @@ RUN \
     # Cleanup.
     del-pkg build-dependencies && \
     rm -rf /tmp/* /tmp/.[!.]*
+
+RUN \
+    # Maximize only the main window.
+    sed-patch 's/<application type="normal">/<application type="normal" title="Czkawka">/' \
+        /etc/xdg/openbox/rc.xml && \
+    # Make sure the main window is always in the background.
+    sed-patch '/<application type="normal" title="Czkawka">/a \    <layer>below</layer>' \
+        /etc/xdg/openbox/rc.xml
 
 # Generate and install favicons.
 RUN \
