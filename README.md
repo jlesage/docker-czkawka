@@ -164,7 +164,6 @@ version: '3'
 services:
   czkawka:
     image: jlesage/czkawka
-    build: .
     ports:
       - "5800:5800"
     volumes:
