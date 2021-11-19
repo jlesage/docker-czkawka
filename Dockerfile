@@ -14,7 +14,7 @@ ARG DOCKER_IMAGE_VERSION=unknown
 ARG CZKAWKA_VERSION=3.2.0
 
 # Define software download URLs.
-ARG CZKAWKA_URL=https://github.com/qarmin/czkawka/archive/${CZKAWKA_VERSION}.tar.gz
+ARG CZKAWKA_URL=https://github.com/qarmin/czkawka/archive/refs/tags/${CZKAWKA_VERSION}.tar.gz
 
 # Define working directory.
 WORKDIR /tmp
