@@ -11,7 +11,7 @@ FROM jlesage/baseimage-gui:alpine-3.12-v3.5.7
 ARG DOCKER_IMAGE_VERSION=unknown
 
 # Define software versions.
-ARG CZKAWKA_VERSION=3.1.0
+ARG CZKAWKA_VERSION=3.2.0
 
 # Define software download URLs.
 ARG CZKAWKA_URL=https://github.com/qarmin/czkawka/archive/${CZKAWKA_VERSION}.tar.gz
