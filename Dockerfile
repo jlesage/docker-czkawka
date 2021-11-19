@@ -1,7 +1,7 @@
 #
 # czkawka Dockerfile
 #
-# https://github.com/jlesage/docker-czkawka
+# https://github.com/ultrahkr/docker-czkawka
 #
 
 # Pull base image.
@@ -47,8 +47,8 @@ RUN \
     echo "[profile.release]" >> Cargo.toml && \
     echo "opt-level = 'z'" >> Cargo.toml && \
     echo "lto = true" >> Cargo.toml && \
-    sed-patch 's|applications-engineering|applications-system|' czkawka_gui/czkawka.glade && \
-    sed-patch 's|<property name="show-close-button">True</property>|<property name="show-close-button">False</property>|' czkawka_gui/czkawka.glade && \
+    sed-patch 's|applications-engineering|applications-system|' czkawka_gui/main_window.glade && \
+    sed-patch 's|<property name="show-close-button">True</property>|<property name="show-close-button">False</property>|' czkawka_gui/main_window.glade && \
     cargo build --release && \
     # Install.
     strip target/release/czkawka_cli && \
@@ -89,5 +89,5 @@ LABEL \
       org.label-schema.name="czkawka" \
       org.label-schema.description="Docker container for Czkawka" \
       org.label-schema.version="$DOCKER_IMAGE_VERSION" \
-      org.label-schema.vcs-url="https://github.com/jlesage/docker-czkawka" \
+      org.label-schema.vcs-url="https://github.com/ultrahkr/docker-czkawka" \
       org.label-schema.schema-version="1.0"
