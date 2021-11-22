@@ -14,7 +14,7 @@ ARG DOCKER_IMAGE_VERSION=unknown
 ARG CZKAWKA_VERSION=3.3.1
 
 # Define software download URLs.
-ARG CZKAWKA_URL=https://github.com/qarmin/czkawka/archive/${CZKAWKA_VERSION}.tar.gz
+ARG CZKAWKA_URL=https://github.com/qarmin/czkawka/archive/refs/tags/${CZKAWKA_VERSION}.tar.gz
 
 # Define working directory.
 WORKDIR /tmp
@@ -47,8 +47,8 @@ RUN \
     echo "[profile.release]" >> Cargo.toml && \
     echo "opt-level = 'z'" >> Cargo.toml && \
     echo "lto = true" >> Cargo.toml && \
-    sed-patch 's|applications-engineering|applications-system|' czkawka_gui/czkawka.glade && \
-    sed-patch 's|<property name="show-close-button">True</property>|<property name="show-close-button">False</property>|' czkawka_gui/czkawka.glade && \
+    sed-patch 's|applications-engineering|applications-system|' czkawka_gui/ui/main_window.glade && \
+    sed-patch 's|<property name="show-close-button">True</property>|<property name="show-close-button">False</property>|' czkawka_gui/ui/main_window.glade && \
     cargo build --release && \
     # Install.
     strip target/release/czkawka_cli && \
