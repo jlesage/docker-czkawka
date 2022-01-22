@@ -4,6 +4,9 @@
 # https://github.com/jlesage/docker-czkawka
 #
 
+# Pull base image.
+FROM jlesage/baseimage-gui:alpine-3.12-v3.5.7
+
 # Docker image version is provided via build arg.
 ARG DOCKER_IMAGE_VERSION=unknown
 
@@ -13,23 +16,33 @@ ARG CZKAWKA_VERSION=3.3.1
 # Define software download URLs.
 ARG CZKAWKA_URL=https://github.com/qarmin/czkawka/archive/${CZKAWKA_VERSION}.tar.gz
 
-# Build Czkawka.
-# NOTE: We need to compile under edge, since the latest Rust (1.56.1) from
-#       Alpine repository is required to compile.  When using the official
-#       version of Rust (https://www.rust-lang.org/tools/install), Czkawka
-#       crashes during GTK initialization (bug in Rust).  See:
-#         https://github.com/qarmin/czkawka/issues/416
-FROM alpine:edge as czkawka
-ARG CZKAWKA_URL
+# Define working directory.
+WORKDIR /tmp
+
+# Install dependencies.
+RUN add-pkg \
+        gtk+3.0 \
+        adwaita-icon-theme \
+        alsa-lib \
+        && \
+    true
+
+# Install Czkawka.
+# NOTE: When not installing Rust from the Alpine repository, we must compile
+#       with `RUSTFLAGS="-C target-feature=-crt-static"` to avoid crash during
+#       GTK initialization.  See https://github.com/qarmin/czkawka/issues/416.
 RUN \
     # Install packages needed by the build.
-    apk --no-cache add \
-        cargo \
+    add-pkg --virtual build-dependencies \
         build-base \
+        bash \
         curl \
         gtk+3.0-dev \
         alsa-lib-dev \
         && \
+    # Install Rust.
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y && \
+    source /root/.cargo/env && \
     # Download.
     echo "Downloading Czkawka..." && \
     mkdir /tmp/czkawka && \
@@ -43,32 +56,23 @@ RUN \
     echo "panic = 'abort'" >> /tmp/czkawka/.cargo/config.toml && \
     echo "codegen-units = 1" >> /tmp/czkawka/.cargo/config.toml && \
     # Patching sources.
-    sed 's|applications-engineering|applications-system|' -i /tmp/czkawka/czkawka_gui/ui/main_window.glade && \
-    sed 's|<property name="show-close-button">True</property>|<property name="show-close-button">False</property>|' -i /tmp/czkawka/czkawka_gui/ui/main_window.glade && \
+    sed-patch 's|applications-engineering|applications-system|' /tmp/czkawka/czkawka_gui/ui/main_window.glade && \
+    sed-patch 's|<property name="show-close-button">True</property>|<property name="show-close-button">False</property>|' /tmp/czkawka/czkawka_gui/ui/main_window.glade && \
     # Compile.
     echo "Compiling Czkawka..." && \
     cd /tmp/czkawka && \
-    cargo build --release && \
+    RUSTFLAGS="-C target-feature=-crt-static" cargo build --release && \
     # Install.
     strip target/release/czkawka_cli && \
     strip target/release/czkawka_gui && \
     cp -av target/release/czkawka_cli /usr/bin/ && \
-    cp -av target/release/czkawka_gui /usr/bin/
-
-# Pull base image.
-FROM jlesage/baseimage-gui:alpine-3.12-v3.5.7
-ARG DOCKER_IMAGE_VERSION
-
-# Define working directory.
-WORKDIR /tmp
-
-# Install dependencies.
-RUN add-pkg \
-        gtk+3.0 \
-        adwaita-icon-theme \
-        alsa-lib \
-        && \
-    true
+    cp -av target/release/czkawka_gui /usr/bin/ && \
+    cd .. && \
+    # Cleanup.
+    rustup self uninstall -y && \
+    rm /root/.profile && \
+    del-pkg build-dependencies && \
+    rm -rf /tmp/* /tmp/.[!.]*
 
 RUN \
     # Maximize only the main window.
@@ -85,8 +89,6 @@ RUN \
 
 # Add files.
 COPY rootfs/ /
-COPY --from=czkawka /usr/bin/czkawka_cli /usr/bin/
-COPY --from=czkawka /usr/bin/czkawka_gui /usr/bin/
 
 # Set environment variables.
 ENV APP_NAME="Czkawka"
