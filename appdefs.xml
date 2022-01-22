@@ -30,6 +30,11 @@ unnecessary files from your computer.
     <!-- Changelog of the application. -->
     <history>
       <release>
+        <version>1.6.0</version>
+        <date>2022-01-21</date>
+        <change>Updated Czkawka to version 4.0.0.</change>
+      </release>
+      <release>
         <version>1.5.0</version>
         <date>2021-11-23</date>
         <change>Updated Czkawka to version 3.3.1.</change>
