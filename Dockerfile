@@ -24,6 +24,8 @@ RUN add-pkg \
         gtk+3.0 \
         gnome-icon-theme \
         alsa-lib \
+        # FFmpeg needed to find similar videos.
+        ffmpeg \
         && \
     true
 
