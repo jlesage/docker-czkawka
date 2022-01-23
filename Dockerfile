@@ -22,7 +22,7 @@ WORKDIR /tmp
 # Install dependencies.
 RUN add-pkg \
         gtk+3.0 \
-        adwaita-icon-theme \
+        gnome-icon-theme \
         alsa-lib \
         && \
     true
