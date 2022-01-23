@@ -30,6 +30,12 @@ unnecessary files from your computer.
     <!-- Changelog of the application. -->
     <history>
       <release>
+        <version>1.6.1</version>
+        <date>2022-01-22</date>
+        <change>Added FFmpeg, needed to find similar videos.</change>
+        <change>Fixed some icons not being displayed correctly.</change>
+      </release>
+      <release>
         <version>1.6.0</version>
         <date>2022-01-21</date>
         <change>Updated Czkawka to version 4.0.0.</change>
