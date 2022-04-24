@@ -11,7 +11,7 @@ FROM jlesage/baseimage-gui:alpine-3.12-v3.5.7
 ARG DOCKER_IMAGE_VERSION=unknown
 
 # Define software versions.
-ARG CZKAWKA_VERSION=4.0.0
+ARG CZKAWKA_VERSION=4.1.0
 
 # Define software download URLs.
 ARG CZKAWKA_URL=https://github.com/qarmin/czkawka/archive/${CZKAWKA_VERSION}.tar.gz
@@ -58,8 +58,7 @@ RUN \
     echo "panic = 'abort'" >> /tmp/czkawka/.cargo/config.toml && \
     echo "codegen-units = 1" >> /tmp/czkawka/.cargo/config.toml && \
     # Patching sources.
-    sed-patch 's|applications-engineering|applications-system|' /tmp/czkawka/czkawka_gui/ui/main_window.glade && \
-    sed-patch 's|<property name="show-close-button">True</property>|<property name="show-close-button">False</property>|' /tmp/czkawka/czkawka_gui/ui/main_window.glade && \
+    sed-patch 's|<property name="show-close-button">True</property>|<property name="show-close-button">False</property>|' /tmp/czkawka/czkawka_gui/ui/main_window.ui && \
     # Compile.
     echo "Compiling Czkawka..." && \
     cd /tmp/czkawka && \
