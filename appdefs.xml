@@ -30,6 +30,13 @@ unnecessary files from your computer.
     <!-- Changelog of the application. -->
     <history>
       <release>
+        <version>1.7.0</version>
+        <date>2022-04-24</date>
+        <change>Updated Czkawka to version 4.1.0.</change>
+        <change>Now using baseimage version 3.5.8, based on Alpine 3.15, which brings the following change:</change>
+        <change level="2">Updated installed packages to get latest security fixes.</change>
+      </release>
+      <release>
         <version>1.6.1</version>
         <date>2022-01-22</date>
         <change>Added FFmpeg, needed to find similar videos.</change>
