@@ -1,3 +1,3 @@
-#!/usr/bin/with-contenv sh
+#!/bin/sh
 cd /storage
 exec /usr/bin/czkawka_gui

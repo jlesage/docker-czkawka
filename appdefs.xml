@@ -30,6 +30,13 @@ unnecessary files from your computer.
     <!-- Changelog of the application. -->
     <history>
       <release>
+        <version>1.8.0</version>
+        <date>2022-11-18</date>
+        <change>Updated Czkawka to version 5.0.2.</change>
+        <change>Now using baseimage version 4.1.6, based on Alpine 3.16, which brings the following change:</change>
+        <change level="2">Updated installed packages to get latest security fixes.</change>
+      </release>
+      <release>
         <version>1.7.0</version>
         <date>2022-04-24</date>
         <change>Updated Czkawka to version 4.1.0.</change>

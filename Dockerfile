@@ -5,15 +5,17 @@
 #
 
 # Pull base image.
-FROM jlesage/baseimage-gui:alpine-3.15-v3.5.8
+FROM jlesage/baseimage-gui:alpine-3.16-v4.1.5
 
 # Docker image version is provided via build arg.
-ARG DOCKER_IMAGE_VERSION=unknown
+# `--build-arg DOCKER_IMAGE_VERSION=1.2.3`
+ARG DOCKER_IMAGE_VERSION=
 
 # Define software versions.
-ARG CZKAWKA_VERSION=4.1.0
+ARG CZKAWKA_VERSION=5.0.2
 
 # Define software download URLs.
+ARG RUST_URL=https://sh.rustup.rs
 ARG CZKAWKA_URL=https://github.com/qarmin/czkawka/archive/${CZKAWKA_VERSION}.tar.gz
 
 # Define working directory.
@@ -21,7 +23,7 @@ WORKDIR /tmp
 
 # Install dependencies.
 RUN add-pkg \
-        gtk+3.0 \
+        gtk4.0 \
         gnome-icon-theme \
         ttf-dejavu \
         alsa-lib \
@@ -40,11 +42,12 @@ RUN \
         build-base \
         bash \
         curl \
-        gtk+3.0-dev \
+        gtk4.0-dev \
         alsa-lib-dev \
+        libheif-dev \
         && \
     # Install Rust.
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y && \
+    curl --proto '=https' --tlsv1.2 -sSf ${RUST_URL} | bash -s -- -y && \
     source /root/.cargo/env && \
     # Download.
     echo "Downloading Czkawka..." && \
@@ -58,8 +61,6 @@ RUN \
     echo "lto = true" >> /tmp/czkawka/.cargo/config.toml && \
     echo "panic = 'abort'" >> /tmp/czkawka/.cargo/config.toml && \
     echo "codegen-units = 1" >> /tmp/czkawka/.cargo/config.toml && \
-    # Patching sources.
-    sed-patch 's|<property name="show-close-button">True</property>|<property name="show-close-button">False</property>|' /tmp/czkawka/czkawka_gui/ui/main_window.ui && \
     # Compile.
     echo "Compiling Czkawka..." && \
     cd /tmp/czkawka && \
@@ -76,14 +77,6 @@ RUN \
     del-pkg build-dependencies && \
     rm -rf /tmp/* /tmp/.[!.]*
 
-RUN \
-    # Maximize only the main window.
-    sed-patch 's/<application type="normal">/<application type="normal" title="Czkawka">/' \
-        /etc/xdg/openbox/rc.xml && \
-    # Make sure the main window is always in the background.
-    sed-patch '/<application type="normal" title="Czkawka">/a \    <layer>below</layer>' \
-        /etc/xdg/openbox/rc.xml
-
 # Generate and install favicons.
 RUN \
     APP_ICON_URL=https://github.com/jlesage/docker-templates/raw/master/jlesage/images/czkawka-icon.png && \
@@ -93,7 +86,11 @@ RUN \
 COPY rootfs/ /
 
 # Set environment variables.
-ENV APP_NAME="Czkawka"
+RUN \
+    set-cont-env APP_NAME "Czkawka" && \
+    set-cont-env APP_VERSION "$CZKAWKA_VERSION" && \
+    set-cont-env DOCKER_IMAGE_VERSION "$DOCKER_IMAGE_VERSION" && \
+    true
 
 # Define mountable directories.
 VOLUME ["/config"]
@@ -104,6 +101,7 @@ VOLUME ["/trash"]
 LABEL \
       org.label-schema.name="czkawka" \
       org.label-schema.description="Docker container for Czkawka" \
-      org.label-schema.version="$DOCKER_IMAGE_VERSION" \
+      org.label-schema.version="${DOCKER_IMAGE_VERSION:-unknown}" \
       org.label-schema.vcs-url="https://github.com/jlesage/docker-czkawka" \
       org.label-schema.schema-version="1.0"
+
