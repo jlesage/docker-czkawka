@@ -1,13 +1,14 @@
 # Docker container for Czkawka
-[![Docker Image Size](https://img.shields.io/microbadger/image-size/jlesage/czkawka)](http://microbadger.com/#/images/jlesage/czkawka) [![Build Status](https://drone.le-sage.com/api/badges/jlesage/docker-czkawka/status.svg)](https://drone.le-sage.com/jlesage/docker-czkawka) [![GitHub Release](https://img.shields.io/github/release/jlesage/docker-czkawka.svg)](https://github.com/jlesage/docker-czkawka/releases/latest) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/JocelynLeSage/0usd)
+[![Docker Image Size](https://img.shields.io/docker/image-size/jlesage/czkawka/latest)](https://hub.docker.com/r/jlesage/czkawka/tags) [![Build Status](https://github.com/jlesage/docker-czkawka/actions/workflows/build-image.yml/badge.svg?branch=master)](https://github.com/jlesage/docker-czkawka/actions/workflows/build-image.yml) [![GitHub Release](https://img.shields.io/github/release/jlesage/docker-czkawka.svg)](https://github.com/jlesage/docker-czkawka/releases/latest) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/JocelynLeSage)
 
 This is a Docker container for [Czkawka](https://github.com/qarmin/czkawka).
 
-The GUI of the application is accessed through a modern web browser (no installation or configuration needed on the client side) or via any VNC client.
+The GUI of the application is accessed through a modern web browser (no
+installation or configuration needed on the client side) or via any VNC client.
 
 ---
 
-[![Czkawka logo](https://images.weserv.nl/?url=raw.githubusercontent.com/jlesage/docker-templates/master/jlesage/images/czkawka-icon.png&w=200)](https://github.com/qarmin/czkawka)[![Czkawka](https://dummyimage.com/400x110/ffffff/575757&text=Czkawka)](https://github.com/qarmin/czkawka)
+[![Czkawka logo](https://images.weserv.nl/?url=raw.githubusercontent.com/jlesage/docker-templates/master/jlesage/images/czkawka-icon.png&w=200)](https://github.com/qarmin/czkawka)[![Czkawka](https://images.placeholders.dev/?width=224&height=110&fontFamily=Georgia,sans-serif&fontWeight=400&fontSize=52&text=Czkawka&bgColor=rgba(0,0,0,0.0)&textColor=rgba(121,121,121,1))](https://github.com/qarmin/czkawka)
 
 Czkawka is written in Rust, simple, fast and easy to use app to remove
 unnecessary files from your computer.
@@ -20,7 +21,7 @@ unnecessary files from your computer.
 and parameters should be adjusted to your need.
 
 Launch the Czkawka docker container with the following command:
-```
+```shell
 docker run -d \
     --name=czkawka \
     -p 5800:5800 \
@@ -30,8 +31,8 @@ docker run -d \
 ```
 
 Where:
-  - `/docker/appdata/czkawka`: This is where the application stores its configuration, log and any files needing persistency.
-  - `$HOME`: This location contains files from your host that need to be accessible by the application.
+  - `/docker/appdata/czkawka`: This is where the application stores its configuration, states, log and any files needing persistency.
+  - `$HOME`: This location contains files from your host that need to be accessible to the application.
 
 Browse to `http://your-host-ip:5800` to access the Czkawka GUI.
 Files from the host appear under the `/storage` folder in the container.
