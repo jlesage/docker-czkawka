@@ -1,0 +1,10 @@
+--- a/czkawka_gui/ui/main_window.ui	2022-11-17 21:54:35.435266384 -0500
++++ b/czkawka_gui/ui/main_window.ui	2022-11-17 21:55:08.492041642 -0500
+@@ -1106,6 +1106,7 @@
+     <property name="default-width">1100</property>
+     <child type="titlebar">
+       <object class="GtkHeaderBar">
++        <property name="show-title-buttons">false</property>
+         <child type="end">
+           <object class="GtkBox">
+             <property name="spacing">5</property>

@@ -1,0 +1,12 @@
+This is a workaround for JWM not maximizing the window when the UI is accessed
+before the app is started.
+--- a/czkawka_gui/ui/main_window.ui	2022-11-17 21:54:35.435266384 -0500
++++ b/czkawka_gui/ui/main_window.ui	2022-11-17 22:45:14.925713529 -0500
+@@ -9,6 +9,7 @@
+     <property name="upper">100</property>
+   </object>
+   <object class="GtkWindow" id="window_main">
++    <property name="maximized">true</property>
+     <property name="child">
+       <object class="GtkBox">
+         <property name="orientation">vertical</property>
