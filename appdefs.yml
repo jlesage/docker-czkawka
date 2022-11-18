@@ -1,0 +1,99 @@
+---
+
+#
+# Definitions for Czkawka docker container.
+#
+# This file is used as data source to generate README.md and unRAID template files
+# from Jinja2 templates.
+#
+
+app:
+  id: 21
+  name: czkawka
+  friendly_name: Czkawka
+  gui_type: x11
+  project:
+    description: |-
+      Czkawka is written in Rust, simple, fast and easy to use app to remove
+      unnecessary files from your computer.
+    url: https://github.com/qarmin/czkawka
+  unraid:
+    support_url: https://forums.unraid.net/topic/101459-support-czkawka/
+    category: "Tools:"
+  documentation:
+  changelog:
+    - version: 1.7.0
+      date: 2022-04-24
+      changes:
+        - 'Updated Czkawka to version 4.1.0.'
+        - 'Now using baseimage version 3.5.8, based on Alpine 3.15, which brings the following change:'
+        - '2:Updated installed packages to get latest security fixes.'
+    - version: 1.6.1
+      date: 2022-01-22
+      changes:
+        - 'Added FFmpeg, needed to find similar videos.'
+        - 'Fixed some icons not being displayed correctly.'
+    - version: 1.6.0
+      date: 2022-01-21
+      changes:
+        - 'Updated Czkawka to version 4.0.0.'
+    - version: 1.5.0
+      date: 2021-11-23
+      changes:
+        - 'Updated Czkawka to version 3.3.1.'
+    - version: 1.4.0
+      date: 2021-05-10
+      changes:
+        - 'Updated Czkawka to version 3.1.0.'
+    - version: 1.3.1
+      date: 2021-04-13
+      changes:
+        - 'Now using baseimage version 3.5.7, which brings the following change:'
+        - '2:Updated installed packages to get latest security fixes.'
+    - version: 1.3.0
+      date: 2021-03-13
+      changes:
+        - 'Updated Czkawka to version 3.0.0.'
+    - version: 1.2.0
+      date: 2021-02-22
+      changes:
+        - 'Updated Czkawka to version 2.4.0.'
+    - version: 1.1.0
+      date: 2021-01-26
+      changes:
+        - 'Updated Czkawka to version 2.3.2.'
+        - 'Added Czkawka CLI to the image.'
+    - version: 1.0.0
+      date: 2021-01-15
+      changes:
+        - 'Initial release.'
+
+container:
+  rough_download_size: 200MB
+  storage_permissions: rw
+
+  # Environment variables.
+  environment_variables: []
+
+  # Volumes
+  volumes:
+    - container_path: /trash
+      host_path_example:
+      description: >-
+        This is where duplicated files are moved when they are sent to trash.
+        Usage of the trash is optional.
+      permissions: rw
+      unraid_template:
+        title: Trash
+        description: >-
+          This is where duplicated files are moved when they are sent to trash.
+          Usage of the trash is optional.
+        display: advanced-hide
+        required: false
+        mask: false
+
+  # Network ports
+  ports: []
+
+  # Devices
+  devices: []
