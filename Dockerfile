@@ -39,7 +39,7 @@ ARG DOCKER_IMAGE_VERSION
 # Install dependencies.
 RUN add-pkg \
         gtk4.0 \
-        ttf-dejavu \
+        font-cantarell \
         alsa-lib \
         libheif \
         dbus-x11 \
