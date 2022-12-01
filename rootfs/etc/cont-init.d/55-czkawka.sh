@@ -13,12 +13,6 @@ fi
 # folder to add.
 echo > /etc/fstab
 
-CONFIG_DIR=/config/xdg/config/czkawka
-if [ ! -f "$CONFIG_DIR"/czkawka_gui_config.txt ]; then
-    mkdir -p "$CONFIG_DIR"
-    cp /defaults/czkawka_gui_config.txt "$CONFIG_DIR"
-fi
-
 if [ ! -f /config/xdg/data/recently-used.xbel ]; then
     mkdir -p /config/xdg/data
     cp /defaults/recently-used.xbel /config/xdg/data/recently-used.xbel
