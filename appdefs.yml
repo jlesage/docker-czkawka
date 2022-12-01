@@ -22,6 +22,10 @@ app:
     category: "Tools:"
   documentation:
   changelog:
+    - version: 22.12.1
+      date: 2022-12-01
+      changes:
+        - 'Restored FFmpeg that was inadvertently removed.'
     - version: 22.11.2
       date: 2022-11-30
       changes:
