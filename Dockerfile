@@ -28,7 +28,7 @@ RUN xx-verify \
     /tmp/czkawka-install/czkawka_gui
 
 # Pull base image.
-FROM jlesage/baseimage-gui:alpine-3.16-v4.2.0
+FROM jlesage/baseimage-gui:alpine-3.17-v4.2.0
 
 # Define working directory.
 WORKDIR /tmp
@@ -39,15 +39,12 @@ ARG DOCKER_IMAGE_VERSION
 # Install dependencies.
 RUN add-pkg \
         gtk4.0 \
-        gnome-icon-theme \
         ttf-dejavu \
         alsa-lib \
         libheif \
         dbus-x11 \
-        mesa-dri-swrast \
-        # FFmpeg needed to find similar videos.
-        # NOTE: Use ffmpeg4 since gtk4.0 already depends on this version.
-        ffmpeg4 \
+        mesa-dri-gallium \
+        ffmpeg \
         && \
     # Save some space by removing unused DRI drivers.
     find /usr/lib/xorg/modules/dri/ -type f ! -name swrast_dri.so -exec echo "Removing {}..." ';' -delete
