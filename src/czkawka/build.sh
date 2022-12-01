@@ -59,6 +59,7 @@ echo "codegen-units = 1" >> /tmp/czkawka/.cargo/config.toml
 log "Patching Czkawka..."
 patch -p1 -d /tmp/czkawka < "$SCRIPT_DIR"/main-window-maximized.patch
 patch -p1 -d /tmp/czkawka < "$SCRIPT_DIR"/hide-title-buttons.patch
+patch -p1 -d /tmp/czkawka < "$SCRIPT_DIR"/results_location.patch
 
 log "Compiling Czkawka..."
 # NOTE: When not installing Rust from the Alpine repository, we must compile
