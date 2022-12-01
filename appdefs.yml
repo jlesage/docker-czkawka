@@ -22,6 +22,13 @@ app:
     category: "Tools:"
   documentation:
   changelog:
+    - version: 22.11.2
+      date: 2022-11-30
+      changes:
+        - 'Fixed saving of results to file.'
+        - 'Disabled trash functionality: current implementation is not adapted for container environment.'
+        - 'Fixed issue where permissions of `/tmp` were incorrect on some systems.'
+        - 'Updated baseimage to version `4.2.0`, which brings multiple internal enhancements.'
     - version: 22.11.1
       date: 2022-11-19
       changes:
