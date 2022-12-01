@@ -118,7 +118,6 @@ format: `<HOST_DIR>:<CONTAINER_DIR>[:PERMISSIONS]`.
 |-----------------|-------------|-------------|
 |`/config`| rw | This is where the application stores its configuration, states, log and any files needing persistency. |
 |`/storage`| rw | This location contains files from your host that need to be accessible to the application. |
-|`/trash`| rw | This is where duplicated files are moved when they are sent to trash. Usage of the trash is optional. |
 
 ### Ports
 

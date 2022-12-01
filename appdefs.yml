@@ -86,21 +86,7 @@ container:
   environment_variables: []
 
   # Volumes
-  volumes:
-    - container_path: /trash
-      host_path_example:
-      description: >-
-        This is where duplicated files are moved when they are sent to trash.
-        Usage of the trash is optional.
-      permissions: rw
-      unraid_template:
-        title: Trash
-        description: >-
-          This is where duplicated files are moved when they are sent to trash.
-          Usage of the trash is optional.
-        display: advanced-hide
-        required: false
-        mask: false
+  volumes: []
 
   # Network ports
   ports: []

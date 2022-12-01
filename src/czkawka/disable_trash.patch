@@ -1,0 +1,50 @@
+--- a/czkawka_gui/ui/settings.ui	2022-11-30 18:47:44.710807848 -0500
++++ b/czkawka_gui/ui/settings.ui	2022-11-30 18:48:07.539874398 -0500
+@@ -105,6 +105,7 @@
+                             <property name="active">1</property>
+                             <property name="focusable">1</property>
+                             <property name="label" translatable="yes">Move deleted files to trash</property>
++                            <property name="sensitive">false</property>
+                           </object>
+                         </child>
+                         <child>
+--- a/czkawka_gui/src/connect_things/connect_button_delete.rs	2022-11-30 18:48:59.933206460 -0500
++++ b/czkawka_gui/src/connect_things/connect_button_delete.rs	2022-11-30 18:49:56.590937189 -0500
+@@ -273,7 +273,7 @@
+     check_button_settings_use_trash: &CheckButton,
+     text_view_errors: &TextView,
+ ) {
+-    let use_trash = check_button_settings_use_trash.is_active();
++    let use_trash = false && check_button_settings_use_trash.is_active();
+ 
+     let model = get_list_store(tree_view);
+ 
+@@ -388,7 +388,7 @@
+     check_button_settings_use_trash: &CheckButton,
+     text_view_errors: &TextView,
+ ) {
+-    let use_trash = check_button_settings_use_trash.is_active();
++    let use_trash = false && check_button_settings_use_trash.is_active();
+ 
+     let model = get_list_store(tree_view);
+ 
+@@ -464,7 +464,7 @@
+     check_button_settings_use_trash: &CheckButton,
+     text_view_errors: &TextView,
+ ) {
+-    let use_trash = check_button_settings_use_trash.is_active();
++    let use_trash = false && check_button_settings_use_trash.is_active();
+ 
+     let model = get_list_store(tree_view);
+ 
+--- a/czkawka_gui/src/saving_loading.rs	2022-11-30 19:05:16.727908825 -0500
++++ b/czkawka_gui/src/saving_loading.rs	2022-11-30 19:18:20.654609426 -0500
+@@ -738,7 +738,7 @@
+     let hide_hard_links: bool = loaded_entries.get_bool(hashmap_ls.get(&LoadText::HideHardLinks).unwrap().clone(), DEFAULT_HIDE_HARD_LINKS);
+     let use_cache: bool = loaded_entries.get_bool(hashmap_ls.get(&LoadText::UseCache).unwrap().clone(), DEFAULT_USE_CACHE);
+     let use_json_cache: bool = loaded_entries.get_bool(hashmap_ls.get(&LoadText::UseJsonCacheFile).unwrap().clone(), DEFAULT_SAVE_ALSO_AS_JSON);
+-    let use_trash: bool = loaded_entries.get_bool(hashmap_ls.get(&LoadText::DeleteToTrash).unwrap().clone(), DEFAULT_USE_TRASH);
++    let use_trash: bool = false; //loaded_entries.get_bool(hashmap_ls.get(&LoadText::DeleteToTrash).unwrap().clone(), DEFAULT_USE_TRASH);
+     let ignore_other_fs: bool = loaded_entries.get_bool(
+         hashmap_ls.get(&LoadText::GeneralIgnoreOtherFilesystems).unwrap().clone(),
+         DEFAULT_GENERAL_IGNORE_OTHER_FILESYSTEMS,

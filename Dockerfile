@@ -71,7 +71,6 @@ RUN \
 
 # Define mountable directories.
 VOLUME ["/storage"]
-VOLUME ["/trash"]
 
 # Metadata.
 LABEL \
