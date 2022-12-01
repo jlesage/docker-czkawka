@@ -28,7 +28,7 @@ RUN xx-verify \
     /tmp/czkawka-install/czkawka_gui
 
 # Pull base image.
-FROM jlesage/baseimage-gui:alpine-3.16-v4.1.5
+FROM jlesage/baseimage-gui:alpine-3.16-v4.2.0
 
 # Define working directory.
 WORKDIR /tmp
