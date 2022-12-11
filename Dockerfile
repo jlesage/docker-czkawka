@@ -17,7 +17,7 @@ ARG CZKAWKA_URL=https://github.com/qarmin/czkawka/archive/${CZKAWKA_VERSION}.tar
 FROM --platform=$BUILDPLATFORM tonistiigi/xx:master AS xx
 
 # Build Czkawka.
-FROM --platform=$BUILDPLATFORM alpine:3.16 AS czkawka
+FROM --platform=$BUILDPLATFORM alpine:3.17 AS czkawka
 ARG TARGETPLATFORM
 ARG CZKAWKA_URL
 COPY --from=xx / /
