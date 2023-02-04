@@ -14,7 +14,7 @@ ARG CZKAWKA_VERSION=5.0.2
 ARG CZKAWKA_URL=https://github.com/qarmin/czkawka/archive/${CZKAWKA_VERSION}.tar.gz
 
 # Get Dockerfile cross-compilation helpers.
-FROM --platform=$BUILDPLATFORM tonistiigi/xx:master AS xx
+FROM --platform=$BUILDPLATFORM tonistiigi/xx AS xx
 
 # Build Czkawka.
 FROM --platform=$BUILDPLATFORM alpine:3.17 AS czkawka

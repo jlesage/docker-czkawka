@@ -69,7 +69,6 @@ log "Compiling Czkawka..."
 (
     cd /tmp/czkawka
     # shared-mime-info.pc is under /usr/share/pkgconfig.
-    PKG_CONFIG=$(xx-info)-pkg-config \
     PKG_CONFIG_PATH=/$(xx-info)/usr/share/pkgconfig \
     RUSTFLAGS="-C target-feature=-crt-static" \
     xx-cargo build --release --all-features
