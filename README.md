@@ -52,13 +52,13 @@ docker run -d \
     --name=czkawka \
     -p 5800:5800 \
     -v /docker/appdata/czkawka:/config:rw \
-    -v $HOME:/storage:rw \
+    -v /home/user:/storage:rw \
     jlesage/czkawka
 ```
 
 Where:
   - `/docker/appdata/czkawka`: This is where the application stores its configuration, states, log and any files needing persistency.
-  - `$HOME`: This location contains files from your host that need to be accessible to the application.
+  - `/home/user`: This location contains files from your host that need to be accessible to the application.
 
 Browse to `http://your-host-ip:5800` to access the Czkawka GUI.
 Files from the host appear under the `/storage` folder in the container.
@@ -211,7 +211,7 @@ services:
       - "5800:5800"
     volumes:
       - "/docker/appdata/czkawka:/config:rw"
-      - "$HOME:/storage:rw"
+      - "/home/user:/storage:rw"
 ```
 
 ## Docker Image Versioning
