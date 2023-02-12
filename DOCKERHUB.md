@@ -8,7 +8,7 @@ installation or configuration needed on the client side) or via any VNC client.
 
 ---
 
-[![Czkawka logo](https://images.weserv.nl/?url=raw.githubusercontent.com/jlesage/docker-templates/master/jlesage/images/czkawka-icon.png&w=110)](https://github.com/qarmin/czkawka)[![Czkawka](https://images.placeholders.dev/?width=224&height=110&fontFamily=Georgia,sans-serif&fontWeight=400&fontSize=52&text=Czkawka&bgColor=rgba(0,0,0,0.0)&textColor=rgba(121,121,121,1))](https://github.com/qarmin/czkawka)
+[![Czkawka logo](https://images.weserv.nl/?url=raw.githubusercontent.com/jlesage/docker-templates/master/jlesage/images/czkawka-icon.png&w=110)](https://github.com/qarmin/czkawka)[![Czkawka](https://images.placeholders.dev/?width=224&height=110&fontFamily=monospace&fontWeight=400&fontSize=52&text=Czkawka&bgColor=rgba(0,0,0,0.0)&textColor=rgba(121,121,121,1))](https://github.com/qarmin/czkawka)
 
 Czkawka is written in Rust, simple, fast and easy to use app to remove
 unnecessary files from your computer.
