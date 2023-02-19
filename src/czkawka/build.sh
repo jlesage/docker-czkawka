@@ -24,6 +24,8 @@ apk --no-cache add \
     curl \
     clang \
     lld \
+    rust \
+    cargo \
     patch \
     pkgconf \
 
@@ -37,9 +39,7 @@ xx-apk --no-cache --no-scripts add \
 # NOTE: Czkawka often requires a recent version of Rust that is not avaialble
 #       yet in Alpine repository.
 USE_RUST_FROM_ALPINE_REPO=false
-if $USE_RUST_FROM_ALPINE_REPO; then
-    apk --no-cache add rust cargo
-else
+if ! $USE_RUST_FROM_ALPINE_REPO; then
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y
     source /root/.cargo/env
 fi
