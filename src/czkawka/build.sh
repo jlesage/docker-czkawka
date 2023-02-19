@@ -24,8 +24,6 @@ apk --no-cache add \
     curl \
     clang \
     lld \
-    rust \
-    cargo \
     patch \
     pkgconf \
 
@@ -39,9 +37,27 @@ xx-apk --no-cache --no-scripts add \
 # NOTE: Czkawka often requires a recent version of Rust that is not avaialble
 #       yet in Alpine repository.
 USE_RUST_FROM_ALPINE_REPO=false
-if ! $USE_RUST_FROM_ALPINE_REPO; then
+if $USE_RUST_FROM_ALPINE_REPO; then
+    apk --no-cache add \
+        rust \
+        cargo
+else
+    apk --no-cache add \
+        gcc \
+        musl-dev
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y
     source /root/.cargo/env
+fi
+
+# Fix the xx-cargo setup.  See https://github.com/tonistiigi/xx/issues/104.
+if xx-info is-cross; then
+    xx-cargo --setup-target-triple
+    if [ ! -e "/$(xx-cargo --print-target-triple)" ]; then
+        ln -s "$(xx-info)" "/$(xx-cargo --print-target-triple)"
+    fi
+    if [ ! -e "$(xx-info sysroot)/usr/lib/gcc/$(xx-cargo --print-target-triple)" ]; then
+        ln -s "$(xx-info)" "$(xx-info sysroot)/usr/lib/gcc/$(xx-cargo --print-target-triple)"
+    fi
 fi
 
 #
