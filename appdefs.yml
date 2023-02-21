@@ -22,6 +22,11 @@ app:
     category: "Tools:"
   documentation:
   changelog:
+    - version: 23.02.3
+      date: 2023-02-20
+      changes:
+        - 'Updated Czkawka to version 5.1.0.'
+        - 'Updated baseimage to version 4.3.6, which brings robustness related enhancements.'
     - version: 23.02.2
       date: 2023-02-08
       changes:
