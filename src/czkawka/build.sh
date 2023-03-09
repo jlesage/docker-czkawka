@@ -66,7 +66,7 @@ fi
 
 log "Downloading Czkawka..."
 mkdir /tmp/czkawka
-curl -# -L ${CZKAWKA_URL} | tar xz --strip 1 -C /tmp/czkawka
+curl -# -L -f ${CZKAWKA_URL} | tar xz --strip 1 -C /tmp/czkawka
 
 #
 # Compile Czkawka.
