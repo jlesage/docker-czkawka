@@ -8,7 +8,7 @@
 ARG DOCKER_IMAGE_VERSION=
 
 # Define software versions.
-ARG CZKAWKA_VERSION=6.0.0
+ARG CZKAWKA_VERSION=6.1.0
 
 # Define software download URLs.
 ARG CZKAWKA_URL=https://github.com/qarmin/czkawka/archive/${CZKAWKA_VERSION}.tar.gz

@@ -1,71 +1,31 @@
 --- a/czkawka_gui/src/connect_things/connect_button_save.rs	2022-11-30 18:25:54.621024937 -0500
 +++ b/czkawka_gui/src/connect_things/connect_button_save.rs	2022-11-30 18:26:50.421737589 -0500
-@@ -35,57 +35,57 @@
+@@ -31,17 +31,17 @@
+     let notebook_main = gui_data.main_notebook.notebook_main.clone();
+     buttons_save.connect_clicked(move |_| {
+         let result = match to_notebook_main_enum(notebook_main.current_page().unwrap()) {
+-            NotebookMainEnum::Duplicate => shared_duplication_state.borrow().save_all_in_one("results_duplicates"),
+-            NotebookMainEnum::EmptyDirectories => shared_empty_folders_state.borrow().save_all_in_one("results_empty_directories"),
+-            NotebookMainEnum::EmptyFiles => shared_empty_files_state.borrow().save_all_in_one("results_empty_files"),
+-            NotebookMainEnum::Temporary => shared_temporary_files_state.borrow().save_all_in_one("results_temporary_files"),
+-            NotebookMainEnum::BigFiles => shared_big_files_state.borrow().save_all_in_one("results_big_files"),
+-            NotebookMainEnum::SimilarImages => shared_similar_images_state.borrow().save_all_in_one("results_similar_images"),
+-            NotebookMainEnum::SimilarVideos => shared_similar_videos_state.borrow().save_all_in_one("results_similar_videos"),
+-            NotebookMainEnum::SameMusic => shared_same_music_state.borrow().save_all_in_one("results_same_music"),
+-            NotebookMainEnum::Symlinks => shared_same_invalid_symlinks.borrow().save_all_in_one("results_invalid_symlinks"),
+-            NotebookMainEnum::BrokenFiles => shared_broken_files_state.borrow().save_all_in_one("results_broken_files"),
+-            NotebookMainEnum::BadExtensions => shared_bad_extensions_state.borrow().save_all_in_one("results_bad_extensions"),
++            NotebookMainEnum::Duplicate => shared_duplication_state.borrow().save_all_in_one("/config/results_duplicates"),
++            NotebookMainEnum::EmptyDirectories => shared_empty_folders_state.borrow().save_all_in_one("/config/results_empty_directories"),
++            NotebookMainEnum::EmptyFiles => shared_empty_files_state.borrow().save_all_in_one("/config/results_empty_files"),
++            NotebookMainEnum::Temporary => shared_temporary_files_state.borrow().save_all_in_one("/config/results_temporary_files"),
++            NotebookMainEnum::BigFiles => shared_big_files_state.borrow().save_all_in_one("/config/results_big_files"),
++            NotebookMainEnum::SimilarImages => shared_similar_images_state.borrow().save_all_in_one("/config/results_similar_images"),
++            NotebookMainEnum::SimilarVideos => shared_similar_videos_state.borrow().save_all_in_one("/config/results_similar_videos"),
++            NotebookMainEnum::SameMusic => shared_same_music_state.borrow().save_all_in_one("/config/results_same_music"),
++            NotebookMainEnum::Symlinks => shared_same_invalid_symlinks.borrow().save_all_in_one("/config/results_invalid_symlinks"),
++            NotebookMainEnum::BrokenFiles => shared_broken_files_state.borrow().save_all_in_one("/config/results_broken_files"),
++            NotebookMainEnum::BadExtensions => shared_bad_extensions_state.borrow().save_all_in_one("/config/results_bad_extensions"),
+         };
  
-         match to_notebook_main_enum(notebook_main.current_page().unwrap()) {
-             NotebookMainEnum::Duplicate => {
--                file_name = "results_duplicates.txt";
-+                file_name = "/config/results_duplicates.txt";
- 
-                 shared_duplication_state.borrow_mut().save_results_to_file(file_name);
-             }
-             NotebookMainEnum::EmptyDirectories => {
--                file_name = "results_empty_folder.txt";
-+                file_name = "/config/results_empty_folder.txt";
- 
-                 shared_empty_folders_state.borrow_mut().save_results_to_file(file_name);
-             }
-             NotebookMainEnum::EmptyFiles => {
--                file_name = "results_empty_files.txt";
-+                file_name = "/config/results_empty_files.txt";
- 
-                 shared_empty_files_state.borrow_mut().save_results_to_file(file_name);
-             }
-             NotebookMainEnum::Temporary => {
--                file_name = "results_temporary_files.txt";
-+                file_name = "/config/results_temporary_files.txt";
- 
-                 shared_temporary_files_state.borrow_mut().save_results_to_file(file_name);
-             }
-             NotebookMainEnum::BigFiles => {
--                file_name = "results_big_files.txt";
-+                file_name = "/config/results_big_files.txt";
- 
-                 shared_big_files_state.borrow_mut().save_results_to_file(file_name);
-             }
-             NotebookMainEnum::SimilarImages => {
--                file_name = "results_similar_images.txt";
-+                file_name = "/config/results_similar_images.txt";
- 
-                 shared_similar_images_state.borrow_mut().save_results_to_file(file_name);
-             }
-             NotebookMainEnum::SimilarVideos => {
--                file_name = "results_similar_videos.txt";
-+                file_name = "/config/results_similar_videos.txt";
- 
-                 shared_similar_videos_state.borrow_mut().save_results_to_file(file_name);
-             }
-             NotebookMainEnum::SameMusic => {
--                file_name = "results_same_music.txt";
-+                file_name = "/config/results_same_music.txt";
- 
-                 shared_same_music_state.borrow_mut().save_results_to_file(file_name);
-             }
-             NotebookMainEnum::Symlinks => {
--                file_name = "results_invalid_symlinks.txt";
-+                file_name = "/config/results_invalid_symlinks.txt";
- 
-                 shared_same_invalid_symlinks.borrow_mut().save_results_to_file(file_name);
-             }
-             NotebookMainEnum::BrokenFiles => {
--                file_name = "results_broken_files.txt";
-+                file_name = "/config/results_broken_files.txt";
- 
-                 shared_broken_files_state.borrow_mut().save_results_to_file(file_name);
-             }
-             NotebookMainEnum::BadExtensions => {
--                file_name = "results_bad_extensions.txt";
-+                file_name = "/config/results_bad_extensions.txt";
- 
-                 shared_bad_extensions_state.borrow_mut().save_results_to_file(file_name);
-             }
+         match result {
