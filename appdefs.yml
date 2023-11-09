@@ -12,6 +12,7 @@ app:
   name: czkawka
   friendly_name: Czkawka
   gui_type: x11
+  base_os: alpine
   project:
     description: |-
       Czkawka is written in Rust, simple, fast and easy to use app to remove
