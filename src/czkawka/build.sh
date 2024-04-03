@@ -23,6 +23,7 @@ apk --no-cache add \
     bash \
     curl \
     clang \
+    g++ \
     lld \
     patch \
     pkgconf \
@@ -30,13 +31,19 @@ apk --no-cache add \
 xx-apk --no-cache --no-scripts add \
     musl-dev \
     gcc \
+    libstdc++-dev \
     gtk4.0-dev \
     libheif-dev \
 
+CZKAWKA_FEATURES="heif"
+if ! xx-info is-cross; then
+    CZKAWKA_FEATURES="$CZKAWKA_FEATURES,libraw"
+fi
+
 # Install Rust.
-# NOTE: Czkawka often requires a recent version of Rust that is not avaialble
+# NOTE: Czkawka often requires a recent version of Rust that is not available
 #       yet in Alpine repository.
-USE_RUST_FROM_ALPINE_REPO=false
+USE_RUST_FROM_ALPINE_REPO=true
 if $USE_RUST_FROM_ALPINE_REPO; then
     apk --no-cache add \
         rust \
@@ -47,6 +54,12 @@ else
         musl-dev
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y
     source /root/.cargo/env
+
+    # NOTE: When not installing Rust from the Alpine repository, we must compile
+    #       with `RUSTFLAGS="-C target-feature=-crt-static"` to avoid crash
+    #       during GTK initialization.
+    #       See https://github.com/qarmin/czkawka/issues/416.
+    export RUSTFLAGS="-C target-feature=-crt-static"
 fi
 
 # Fix the xx-cargo setup.  See https://github.com/tonistiigi/xx/issues/104.
@@ -77,8 +90,8 @@ curl -# -L -f ${CZKAWKA_URL} | tar xz --strip 1 -C /tmp/czkawka
 mkdir /tmp/czkawka/.cargo
 echo "[profile.release]" >> /tmp/czkawka/.cargo/config.toml
 echo "strip = true" >> /tmp/czkawka/.cargo/config.toml
-echo "opt-level = 'z'" >> /tmp/czkawka/.cargo/config.toml
-echo "lto = true" >> /tmp/czkawka/.cargo/config.toml
+echo "opt-level = 's'" >> /tmp/czkawka/.cargo/config.toml
+echo "lto = 'thin'" >> /tmp/czkawka/.cargo/config.toml
 echo "panic = 'abort'" >> /tmp/czkawka/.cargo/config.toml
 echo "codegen-units = 1" >> /tmp/czkawka/.cargo/config.toml
 
@@ -88,7 +101,15 @@ patch -p1 -d /tmp/czkawka < "$SCRIPT_DIR"/hide-title-buttons.patch
 patch -p1 -d /tmp/czkawka < "$SCRIPT_DIR"/results_location.patch
 patch -p1 -d /tmp/czkawka < "$SCRIPT_DIR"/disable_trash.patch
 
-log "Compiling Czkawka..."
+log "Compiling Czkawka CLI..."
+(
+    cd /tmp/czkawka
+    # shared-mime-info.pc is under /usr/share/pkgconfig.
+    PKG_CONFIG_PATH=/$(xx-info)/usr/share/pkgconfig \
+    xx-cargo build --release --bin czkawka_cli --features "$CZKAWKA_FEATURES"
+)
+
+log "Compiling Czkawka GUI..."
 # NOTE: When not installing Rust from the Alpine repository, we must compile
 #       with `RUSTFLAGS="-C target-feature=-crt-static"` to avoid crash during
 #       GTK initialization.  See https://github.com/qarmin/czkawka/issues/416.
@@ -96,8 +117,7 @@ log "Compiling Czkawka..."
     cd /tmp/czkawka
     # shared-mime-info.pc is under /usr/share/pkgconfig.
     PKG_CONFIG_PATH=/$(xx-info)/usr/share/pkgconfig \
-    RUSTFLAGS="-C target-feature=-crt-static" \
-    xx-cargo build --release --all-features
+    xx-cargo build --release --bin czkawka_gui --features "$CZKAWKA_FEATURES"
 )
 
 log "Installing Czkawka..."

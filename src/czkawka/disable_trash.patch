@@ -40,11 +40,11 @@
 --- a/czkawka_gui/src/saving_loading.rs	2022-11-30 19:05:16.727908825 -0500
 +++ b/czkawka_gui/src/saving_loading.rs	2022-11-30 19:18:20.654609426 -0500
 @@ -738,7 +738,7 @@
-     let hide_hard_links: bool = loaded_entries.get_bool(hashmap_ls.get(&LoadText::HideHardLinks).unwrap().clone(), DEFAULT_HIDE_HARD_LINKS);
-     let use_cache: bool = loaded_entries.get_bool(hashmap_ls.get(&LoadText::UseCache).unwrap().clone(), DEFAULT_USE_CACHE);
-     let use_json_cache: bool = loaded_entries.get_bool(hashmap_ls.get(&LoadText::UseJsonCacheFile).unwrap().clone(), DEFAULT_SAVE_ALSO_AS_JSON);
--    let use_trash: bool = loaded_entries.get_bool(hashmap_ls.get(&LoadText::DeleteToTrash).unwrap().clone(), DEFAULT_USE_TRASH);
-+    let use_trash: bool = false; //loaded_entries.get_bool(hashmap_ls.get(&LoadText::DeleteToTrash).unwrap().clone(), DEFAULT_USE_TRASH);
-     let ignore_other_fs: bool = loaded_entries.get_bool(
-         hashmap_ls.get(&LoadText::GeneralIgnoreOtherFilesystems).unwrap().clone(),
-         DEFAULT_GENERAL_IGNORE_OTHER_FILESYSTEMS,
+     let hide_hard_links: bool = loaded_entries.get_bool(hashmap_ls[&LoadText::HideHardLinks].clone(), DEFAULT_HIDE_HARD_LINKS);
+     let use_cache: bool = loaded_entries.get_bool(hashmap_ls[&LoadText::UseCache].clone(), DEFAULT_USE_CACHE);
+     let use_json_cache: bool = loaded_entries.get_bool(hashmap_ls[&LoadText::UseJsonCacheFile].clone(), DEFAULT_SAVE_ALSO_AS_JSON);
+-    let use_trash: bool = loaded_entries.get_bool(hashmap_ls[&LoadText::DeleteToTrash].clone(), DEFAULT_USE_TRASH);
++    let use_trash: bool = false; //loaded_entries.get_bool(hashmap_ls[&LoadText::DeleteToTrash].clone(), DEFAULT_USE_TRASH);
+     let ignore_other_fs: bool = loaded_entries.get_bool(hashmap_ls[&LoadText::GeneralIgnoreOtherFilesystems].clone(), DEFAULT_GENERAL_IGNORE_OTHER_FILESYSTEMS);
+     let delete_outdated_cache_duplicates: bool = loaded_entries.get_bool(
+         hashmap_ls[&LoadText::DuplicateDeleteOutdatedCacheEntries].clone(),
