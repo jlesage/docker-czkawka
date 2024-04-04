@@ -23,6 +23,10 @@ app:
     category: "Tools:"
   documentation:
   changelog:
+    - version: 24.04.1
+      date: 2024-04-04
+      changes:
+        - 'Updated Czkawka to version 7.0.0.'
     - version: 24.02.1
       date: 2024-02-18
       changes:
