@@ -45,6 +45,7 @@ RUN add-pkg \
         dbus-x11 \
         mesa-dri-gallium \
         ffmpeg \
+        ffplay \
         && \
     # Save some space by removing unused DRI drivers.
     find /usr/lib/xorg/modules/dri/ -type f ! -name swrast_dri.so ! -name libgallium_dri.so -exec echo "Removing {}..." ';' -delete
