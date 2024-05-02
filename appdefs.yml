@@ -23,6 +23,10 @@ app:
     category: "Tools:"
   documentation:
   changelog:
+    - version: 24.05.1
+      date: 2024-05-02
+      changes:
+        - 'Fixed issue where videos were not playing.'
     - version: 24.04.1
       date: 2024-04-04
       changes:
