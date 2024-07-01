@@ -9,3 +9,5 @@ export GTK_A11Y=none
 
 cd /storage
 exec /usr/bin/czkawka_gui
+
+# vim:ft=sh:ts=4:sw=4:et:sts=4
