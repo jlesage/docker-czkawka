@@ -28,7 +28,7 @@ RUN xx-verify \
     /tmp/czkawka-install/czkawka_gui
 
 # Pull base image.
-FROM jlesage/baseimage-gui:alpine-3.19-v4.5.3
+FROM jlesage/baseimage-gui:alpine-3.19-v4.6.3
 
 # Define working directory.
 WORKDIR /tmp
@@ -43,12 +43,8 @@ RUN add-pkg \
         alsa-lib \
         libheif \
         dbus-x11 \
-        mesa-dri-gallium \
         ffmpeg \
-        ffplay \
-        && \
-    # Save some space by removing unused DRI drivers.
-    find /usr/lib/xorg/modules/dri/ -type f ! -name swrast_dri.so ! -name libgallium_dri.so -exec echo "Removing {}..." ';' -delete
+        ffplay
 
 # Generate and install favicons.
 RUN \
