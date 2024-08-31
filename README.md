@@ -50,9 +50,9 @@ unnecessary files from your computer.
 
 ## Quick Start
 
-**NOTE**:
-    The Docker command provided in this quick start is given as an example
-    and parameters should be adjusted to your need.
+> [!IMPORTANT]
+> The Docker command provided in this quick start is given as an example and
+> parameters should be adjusted to your need.
 
 Launch the Czkawka docker container with the following command:
 ```shell
@@ -213,11 +213,11 @@ docker rm czkawka
   3. Create/start the container using the `docker run` command, by adjusting
      parameters as needed.
 
-**NOTE**:
-    Since all application's data is saved under the `/config` container
-    folder, destroying and re-creating a container is not a problem: nothing is
-    lost and the application comes back with the same state (as long as the
-    mapping of the `/config` folder remains the same).
+> [!NOTE]
+> Since all application's data is saved under the `/config` container folder,
+> destroying and re-creating a container is not a problem: nothing is lost and
+> the application comes back with the same state (as long as the mapping of the
+> `/config` folder remains the same).
 
 ## Docker Compose File
 
@@ -406,13 +406,13 @@ PEM encoded, x509 certificates.
 |`/config/certs/web-privkey.pem`  |HTTPs connection encryption.|Web server's private key.|
 |`/config/certs/web-fullchain.pem`|HTTPs connection encryption.|Web server's certificate, bundled with any root and intermediate certificates.|
 
-**NOTE**:
-    To prevent any certificate validity warnings/errors from the browser
-    or VNC client, make sure to supply your own valid certificates.
+> [!TIP]
+> To prevent any certificate validity warnings/errors from the browser or VNC
+> client, make sure to supply your own valid certificates.
 
-**NOTE**:
-    Certificate files are monitored and relevant daemons are automatically
-    restarted when changes are detected.
+> [!NOTE]
+> Certificate files are monitored and relevant daemons are automatically
+> restarted when changes are detected.
 
 ### VNC Password
 
@@ -430,11 +430,11 @@ The level of security provided by the VNC password depends on two things:
 When using a VNC password, it is highly desirable to enable the secure
 connection to prevent sending the password in clear over an unencrypted channel.
 
-**ATTENTION**:
-    Password is limited to 8 characters. This limitation comes from
-    the Remote Framebuffer Protocol [RFC](https://tools.ietf.org/html/rfc6143)
-    (see section [7.2.2](https://tools.ietf.org/html/rfc6143#section-7.2.2)).
-    Any characters beyond the limit are ignored.
+> [!CAUTION]
+> Password is limited to 8 characters. This limitation comes from the Remote
+> Framebuffer Protocol [RFC](https://tools.ietf.org/html/rfc6143) (see section
+> [7.2.2](https://tools.ietf.org/html/rfc6143#section-7.2.2)). Any characters
+> beyond the limit are ignored.
 
 ### Web Authentication
 
@@ -448,8 +448,9 @@ environment variable to `1`.
 See the [Environment Variables](#environment-variables) section for more details
 on how to set an environment variable.
 
-**NOTE**: Secure connection must be also enabled to use web authentication.
-          See the [Security](#security) section for more details.
+> [!IMPORTANT]
+> Secure connection must also be enabled to use web authentication.
+> See the [Security](#security) section for more details.
 
 #### Configuring Users Credentials
 
@@ -565,6 +566,9 @@ server {
 	location = /czkawka {return 301 $scheme://$http_host/czkawka/;}
 	location /czkawka/ {
 		proxy_pass http://docker-czkawka/;
+		# Uncomment the following line if your Nginx server runs on a port that
+		# differs from the one seen by external clients.
+		#port_in_redirect off;
 		location /czkawka/websockify {
 			proxy_pass http://docker-czkawka/websockify/;
 			proxy_http_version 1.1;
