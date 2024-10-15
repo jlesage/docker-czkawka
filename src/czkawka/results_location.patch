@@ -1,31 +1,21 @@
---- a/czkawka_gui/src/connect_things/connect_button_save.rs	2022-11-30 18:25:54.621024937 -0500
-+++ b/czkawka_gui/src/connect_things/connect_button_save.rs	2022-11-30 18:26:50.421737589 -0500
-@@ -31,17 +31,17 @@
-     let notebook_main = gui_data.main_notebook.notebook_main.clone();
-     buttons_save.connect_clicked(move |_| {
-         let result = match to_notebook_main_enum(notebook_main.current_page().unwrap()) {
--            NotebookMainEnum::Duplicate => shared_duplication_state.borrow().save_all_in_one("results_duplicates"),
--            NotebookMainEnum::EmptyDirectories => shared_empty_folders_state.borrow().save_all_in_one("results_empty_directories"),
--            NotebookMainEnum::EmptyFiles => shared_empty_files_state.borrow().save_all_in_one("results_empty_files"),
--            NotebookMainEnum::Temporary => shared_temporary_files_state.borrow().save_all_in_one("results_temporary_files"),
--            NotebookMainEnum::BigFiles => shared_big_files_state.borrow().save_all_in_one("results_big_files"),
--            NotebookMainEnum::SimilarImages => shared_similar_images_state.borrow().save_all_in_one("results_similar_images"),
--            NotebookMainEnum::SimilarVideos => shared_similar_videos_state.borrow().save_all_in_one("results_similar_videos"),
--            NotebookMainEnum::SameMusic => shared_same_music_state.borrow().save_all_in_one("results_same_music"),
--            NotebookMainEnum::Symlinks => shared_same_invalid_symlinks.borrow().save_all_in_one("results_invalid_symlinks"),
--            NotebookMainEnum::BrokenFiles => shared_broken_files_state.borrow().save_all_in_one("results_broken_files"),
--            NotebookMainEnum::BadExtensions => shared_bad_extensions_state.borrow().save_all_in_one("results_bad_extensions"),
-+            NotebookMainEnum::Duplicate => shared_duplication_state.borrow().save_all_in_one("/config/results_duplicates"),
-+            NotebookMainEnum::EmptyDirectories => shared_empty_folders_state.borrow().save_all_in_one("/config/results_empty_directories"),
-+            NotebookMainEnum::EmptyFiles => shared_empty_files_state.borrow().save_all_in_one("/config/results_empty_files"),
-+            NotebookMainEnum::Temporary => shared_temporary_files_state.borrow().save_all_in_one("/config/results_temporary_files"),
-+            NotebookMainEnum::BigFiles => shared_big_files_state.borrow().save_all_in_one("/config/results_big_files"),
-+            NotebookMainEnum::SimilarImages => shared_similar_images_state.borrow().save_all_in_one("/config/results_similar_images"),
-+            NotebookMainEnum::SimilarVideos => shared_similar_videos_state.borrow().save_all_in_one("/config/results_similar_videos"),
-+            NotebookMainEnum::SameMusic => shared_same_music_state.borrow().save_all_in_one("/config/results_same_music"),
-+            NotebookMainEnum::Symlinks => shared_same_invalid_symlinks.borrow().save_all_in_one("/config/results_invalid_symlinks"),
-+            NotebookMainEnum::BrokenFiles => shared_broken_files_state.borrow().save_all_in_one("/config/results_broken_files"),
-+            NotebookMainEnum::BadExtensions => shared_bad_extensions_state.borrow().save_all_in_one("/config/results_bad_extensions"),
-         };
+--- a/czkawka_gui/src/connect_things/connect_button_save.rs	2024-10-14 20:32:26.095130157 -0400
++++ b/czkawka_gui/src/connect_things/connect_button_save.rs	2024-10-14 20:38:29.880494004 -0400
+@@ -1,6 +1,5 @@
+ use std::cell::RefCell;
+ use std::collections::HashMap;
+-use std::env;
+ use std::rc::Rc;
  
-         match result {
+ use czkawka_core::common_traits::PrintResults;
+@@ -31,10 +30,7 @@
+     let notebook_main = gui_data.main_notebook.notebook_main.clone();
+ 
+     buttons_save.connect_clicked(move |_| {
+-        let current_path = match env::current_dir() {
+-            Ok(t) => t.to_string_lossy().to_string(),
+-            Err(_) => "__unknown__".to_string(),
+-        };
++        let current_path = "/config".to_string();
+         let result = match to_notebook_main_enum(notebook_main.current_page().expect("Current page not set")) {
+             NotebookMainEnum::Duplicate => shared_duplication_state.borrow().as_ref().map(|x| x.save_all_in_one(&current_path, "results_duplicates")),
+             NotebookMainEnum::EmptyDirectories => shared_empty_folders_state

@@ -43,7 +43,7 @@ fi
 # Install Rust.
 # NOTE: Czkawka often requires a recent version of Rust that is not available
 #       yet in Alpine repository.
-USE_RUST_FROM_ALPINE_REPO=true
+USE_RUST_FROM_ALPINE_REPO=false
 if $USE_RUST_FROM_ALPINE_REPO; then
     apk --no-cache add \
         rust \

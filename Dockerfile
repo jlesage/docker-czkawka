@@ -8,7 +8,7 @@
 ARG DOCKER_IMAGE_VERSION=
 
 # Define software versions.
-ARG CZKAWKA_VERSION=7.0.0
+ARG CZKAWKA_VERSION=8.0.0
 
 # Define software download URLs.
 ARG CZKAWKA_URL=https://github.com/qarmin/czkawka/archive/${CZKAWKA_VERSION}.tar.gz
@@ -17,7 +17,7 @@ ARG CZKAWKA_URL=https://github.com/qarmin/czkawka/archive/${CZKAWKA_VERSION}.tar
 FROM --platform=$BUILDPLATFORM tonistiigi/xx AS xx
 
 # Build Czkawka.
-FROM --platform=$BUILDPLATFORM alpine:3.19 AS czkawka
+FROM --platform=$BUILDPLATFORM alpine:3.20 AS czkawka
 ARG TARGETPLATFORM
 ARG CZKAWKA_URL
 COPY --from=xx / /
@@ -28,7 +28,7 @@ RUN xx-verify \
     /tmp/czkawka-install/czkawka_gui
 
 # Pull base image.
-FROM jlesage/baseimage-gui:alpine-3.19-v4.6.4
+FROM jlesage/baseimage-gui:alpine-3.20-v4.6.4
 
 # Define working directory.
 WORKDIR /tmp
