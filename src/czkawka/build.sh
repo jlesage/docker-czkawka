@@ -96,11 +96,17 @@ echo "panic = 'abort'" >> /tmp/czkawka/.cargo/config.toml
 echo "codegen-units = 1" >> /tmp/czkawka/.cargo/config.toml
 
 log "Patching Czkawka..."
-patch -p1 -d /tmp/czkawka < "$SCRIPT_DIR"/main-window-maximized.patch
-patch -p1 -d /tmp/czkawka < "$SCRIPT_DIR"/hide-title-buttons.patch
-patch -p1 -d /tmp/czkawka < "$SCRIPT_DIR"/results_location.patch
-patch -p1 -d /tmp/czkawka < "$SCRIPT_DIR"/disable_trash.patch
-patch -p1 -d /tmp/czkawka < "$SCRIPT_DIR"/fix-systemtime-crash.patch
+PATCHES="
+    main-window-maximized.patch
+    hide-title-buttons.patch
+    results_location.patch
+    disable_trash.patch
+    fix-systemtime-crash.patch
+"
+for PATCH in $PATCHES; do
+    log "Applying $PATCH..."
+    patch  -p1 -d /tmp/czkawka < "$SCRIPT_DIR"/"$PATCH"
+done
 
 log "Compiling Czkawka CLI..."
 (
