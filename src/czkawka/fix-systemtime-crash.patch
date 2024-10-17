@@ -1,0 +1,82 @@
+From 8a60c765d8cb72eff64dc034818f4b72c32fb2a2 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Rafa=C5=82=20Mikrut?= <mikrutrafal@protonmail.com>
+Date: Sat, 12 Oct 2024 22:59:17 +0200
+Subject: [PATCH] Use instant instead systemtime
+
+---
+ czkawka_core/src/common.rs         |  8 ++++----
+ czkawka_core/src/similar_images.rs | 15 +++------------
+ 2 files changed, 7 insertions(+), 16 deletions(-)
+
+diff --git a/czkawka_core/src/common.rs b/czkawka_core/src/common.rs
+index 0d8ea1a9..a02b24e4 100644
+--- a/czkawka_core/src/common.rs
++++ b/czkawka_core/src/common.rs
+@@ -5,7 +5,7 @@ use std::path::{Path, PathBuf};
+ use std::sync::atomic::{AtomicBool, AtomicUsize};
+ use std::sync::{atomic, Arc};
+ use std::thread::{sleep, JoinHandle};
+-use std::time::{Duration, SystemTime};
++use std::time::{Duration, Instant};
+ use std::{fs, thread};
+ 
+ use crossbeam_channel::Sender;
+@@ -529,10 +529,10 @@ pub fn prepare_thread_handler_common(
+         let atomic_counter = atomic_counter.clone();
+         thread::spawn(move || {
+             // Use earlier time, to send immediately first message
+-            let mut time_since_last_send = SystemTime::now() - Duration::from_secs(10u64);
++            let mut time_since_last_send = Instant::now().checked_sub(Duration::from_secs(10u64)).unwrap();
+ 
+             loop {
+-                if time_since_last_send.elapsed().expect("Cannot count time backwards").as_millis() > SEND_PROGRESS_DATA_TIME_BETWEEN as u128 {
++                if time_since_last_send.elapsed().as_millis() > SEND_PROGRESS_DATA_TIME_BETWEEN as u128 {
+                     let progress_data = ProgressData {
+                         sstage,
+                         checking_method,
+@@ -546,7 +546,7 @@ pub fn prepare_thread_handler_common(
+                     progress_data.validate();
+ 
+                     progress_send.send(progress_data).expect("Cannot send progress data");
+-                    time_since_last_send = SystemTime::now();
++                    time_since_last_send = Instant::now();
+                 }
+                 if !progress_thread_run.load(atomic::Ordering::Relaxed) {
+                     break;
+diff --git a/czkawka_core/src/similar_images.rs b/czkawka_core/src/similar_images.rs
+index e77a6dd1..8d789589 100644
+--- a/czkawka_core/src/similar_images.rs
++++ b/czkawka_core/src/similar_images.rs
+@@ -2,7 +2,7 @@ use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
+ use std::io::Write;
+ use std::path::{Path, PathBuf};
+ use std::sync::atomic::Ordering;
+-use std::time::SystemTime;
++use std::time::Instant;
+ use std::{mem, panic};
+ 
+ use bk_tree::BKTree;
+@@ -890,21 +890,12 @@ pub fn test_image_conversion_speed() {
+                     for size in [8, 16, 32, 64] {
+                         let hasher_config = HasherConfig::new().hash_alg(alg).resize_filter(filter).hash_size(size, size);
+ 
+-                        let start = SystemTime::now();
++                        let start = Instant::now();
+ 
+                         let hasher = hasher_config.to_hasher();
+                         let _hash = hasher.hash_image(&img_open);
+ 
+-                        let end = SystemTime::now();
+-
+-                        println!(
+-                            "{:?} us {:?} {:?} {}x{}",
+-                            end.duration_since(start).expect("Used time backwards").as_micros(),
+-                            alg,
+-                            filter,
+-                            size,
+-                            size
+-                        );
++                        println!("{:?} us {:?} {:?} {}x{}", start.elapsed().as_micros(), alg, filter, size, size);
+                     }
+                 }
+             }
