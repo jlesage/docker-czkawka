@@ -92,7 +92,7 @@ echo "[profile.release]" >> /tmp/czkawka/.cargo/config.toml
 echo "strip = true" >> /tmp/czkawka/.cargo/config.toml
 echo "opt-level = 's'" >> /tmp/czkawka/.cargo/config.toml
 echo "lto = 'thin'" >> /tmp/czkawka/.cargo/config.toml
-echo "panic = 'abort'" >> /tmp/czkawka/.cargo/config.toml
+echo "panic = 'unwind'" >> /tmp/czkawka/.cargo/config.toml
 echo "codegen-units = 1" >> /tmp/czkawka/.cargo/config.toml
 
 log "Patching Czkawka..."
