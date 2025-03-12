@@ -23,6 +23,10 @@ app:
     category: "Tools:"
   documentation:
   changelog:
+    - version: 25.03.1
+      date: 2025-03-11
+      changes:
+        - 'Improved handling of file parsing problems.'
     - version: 25.02.1
       date: 2025-02-09
       changes:
