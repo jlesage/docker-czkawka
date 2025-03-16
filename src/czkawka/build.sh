@@ -101,7 +101,6 @@ PATCHES="
     hide-title-buttons.patch
     results_location.patch
     disable_trash.patch
-    fix-systemtime-crash.patch
 "
 for PATCH in $PATCHES; do
     log "Applying $PATCH..."
