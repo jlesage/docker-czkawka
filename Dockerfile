@@ -41,10 +41,12 @@ RUN add-pkg \
         gtk4.0 \
         font-cantarell \
         alsa-lib \
-        libheif \
         dbus-x11 \
         ffmpeg \
-        ffplay
+        ffplay \
+        && \
+    add-pkg --repository http://dl-cdn.alpinelinux.org/alpine/v3.21/community \
+        libheif
 
 # Generate and install favicons.
 RUN \
