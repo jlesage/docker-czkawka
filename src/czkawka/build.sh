@@ -22,6 +22,7 @@ fi
 apk --no-cache add \
     bash \
     curl \
+    git \
     clang \
     g++ \
     lld \
@@ -101,11 +102,23 @@ PATCHES="
     hide-title-buttons.patch
     results_location.patch
     disable_trash.patch
+    video_hash_fix.patch
 "
 for PATCH in $PATCHES; do
     log "Applying $PATCH..."
     patch  -p1 -d /tmp/czkawka < "$SCRIPT_DIR"/"$PATCH"
 done
+
+# Fix for Czkawka failing to compile, due to vid_dup_finder_lib, for 32-bit
+# targets. See:
+#   - https://github.com/qarmin/czkawka/issues/1477
+#   - https://github.com/Farmadupe/vid_dup_finder_lib/issues/12
+(
+    echo "[patch.crates-io]" >> /tmp/czkawka/.cargo/config.toml
+    echo "vid_dup_finder_lib = { path = '/tmp/vid_dup_finder_lib/vid_dup_finder_lib' }" >> /tmp/czkawka/.cargo/config.toml
+    git clone https://github.com/Farmadupe/vid_dup_finder_lib.git /tmp/vid_dup_finder_lib
+    git -C /tmp/vid_dup_finder_lib reset --hard 23ef0f09273f3719b2a16a37639bf789e00ed3be
+)
 
 log "Compiling Czkawka CLI..."
 (
