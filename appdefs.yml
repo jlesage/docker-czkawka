@@ -23,6 +23,11 @@ app:
     category: "Tools:"
   documentation:
   changelog:
+    - version: 25.04.1
+      date: 2025-04-18
+      changes:
+        - 'Updated Czkawka to version 9.0.0.'
+        - 'Fixed potential issues with handling of HEIC files.'
     - version: 25.03.1
       date: 2025-03-11
       changes:
