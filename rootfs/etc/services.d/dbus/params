@@ -1,0 +1,4 @@
+--session
+--nofork
+--nosyslog
+--address=unix:path=/tmp/dbus

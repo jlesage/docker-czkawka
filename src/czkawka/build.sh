@@ -102,23 +102,11 @@ PATCHES="
     hide-title-buttons.patch
     results_location.patch
     disable_trash.patch
-    video_hash_fix.patch
 "
 for PATCH in $PATCHES; do
     log "Applying $PATCH..."
     patch  -p1 -d /tmp/czkawka < "$SCRIPT_DIR"/"$PATCH"
 done
-
-# Fix for Czkawka failing to compile, due to vid_dup_finder_lib, for 32-bit
-# targets. See:
-#   - https://github.com/qarmin/czkawka/issues/1477
-#   - https://github.com/Farmadupe/vid_dup_finder_lib/issues/12
-(
-    echo "[patch.crates-io]" >> /tmp/czkawka/.cargo/config.toml
-    echo "vid_dup_finder_lib = { path = '/tmp/vid_dup_finder_lib/vid_dup_finder_lib' }" >> /tmp/czkawka/.cargo/config.toml
-    git clone https://github.com/Farmadupe/vid_dup_finder_lib.git /tmp/vid_dup_finder_lib
-    git -C /tmp/vid_dup_finder_lib reset --hard 23ef0f09273f3719b2a16a37639bf789e00ed3be
-)
 
 log "Compiling Czkawka CLI..."
 (
@@ -139,7 +127,17 @@ log "Compiling Czkawka GUI..."
     xx-cargo build --release --bin czkawka_gui --features "$CZKAWKA_FEATURES"
 )
 
+log "Compiling Czkawka Krokiet GUI..."
+(
+    export SLINT_STYLE=fluent
+    cd /tmp/czkawka
+    # shared-mime-info.pc is under /usr/share/pkgconfig.
+    PKG_CONFIG_PATH=/$(xx-info)/usr/share/pkgconfig \
+    xx-cargo build --release --bin krokiet --features "$CZKAWKA_FEATURES"
+)
+
 log "Installing Czkawka..."
 mkdir /tmp/czkawka-install
 cp -v /tmp/czkawka/target/*/release/czkawka_cli /tmp/czkawka-install/
 cp -v /tmp/czkawka/target/*/release/czkawka_gui /tmp/czkawka-install/
+cp -v /tmp/czkawka/target/*/release/krokiet /tmp/czkawka-install/

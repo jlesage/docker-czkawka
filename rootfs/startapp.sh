@@ -8,6 +8,10 @@ export LIBGL_ALWAYS_SOFTWARE=true
 export GTK_A11Y=none
 
 cd /storage
-exec /usr/bin/czkawka_gui
+if is-bool-val-true "${CZKAWKA_GUI_KROKIET:-0}"; then
+    exec /usr/bin/krokiet
+else
+    exec /usr/bin/czkawka_gui
+fi
 
 # vim:ft=sh:ts=4:sw=4:et:sts=4

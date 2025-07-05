@@ -8,7 +8,7 @@
 ARG DOCKER_IMAGE_VERSION=
 
 # Define software versions.
-ARG CZKAWKA_VERSION=9.0.0
+ARG CZKAWKA_VERSION=2be42d9478501a90c36e8b1002fa3c7e5cb5ad2d
 
 # Define software download URLs.
 ARG CZKAWKA_URL=https://github.com/qarmin/czkawka/archive/${CZKAWKA_VERSION}.tar.gz
@@ -39,11 +39,20 @@ ARG DOCKER_IMAGE_VERSION
 # Install dependencies.
 RUN add-pkg \
         gtk4.0 \
-        font-cantarell \
+        font-dejavu \
         alsa-lib \
-        dbus-x11 \
         ffmpeg \
         ffplay \
+        # For krokiet support.
+        libxkbcommon-x11 \
+        # Needed to edit krokiet config.
+        jq \
+        moreutils \
+        # For the file dialog support (via XDG Desktop Portal backend) of krokiet.
+        # https://lib.rs/crates/rfd
+        dbus \
+        xdg-desktop-portal-gtk \
+        adwaita-icon-theme \
         && \
     add-pkg --repository http://dl-cdn.alpinelinux.org/alpine/v3.21/community \
         libheif
@@ -57,6 +66,7 @@ RUN \
 COPY rootfs/ /
 COPY --from=czkawka /tmp/czkawka-install/czkawka_cli /usr/bin/
 COPY --from=czkawka /tmp/czkawka-install/czkawka_gui /usr/bin/
+COPY --from=czkawka /tmp/czkawka-install/krokiet /usr/bin/
 
 # Set internal environment variables.
 RUN \
@@ -64,6 +74,10 @@ RUN \
     set-cont-env APP_VERSION "$CZKAWKA_VERSION" && \
     set-cont-env DOCKER_IMAGE_VERSION "$DOCKER_IMAGE_VERSION" && \
     true
+
+# Set public environment variables.
+ENV \
+    CZKAWKA_GUI_KROKIET=0
 
 # Define mountable directories.
 VOLUME ["/storage"]

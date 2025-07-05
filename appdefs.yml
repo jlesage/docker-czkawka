@@ -241,7 +241,21 @@ container:
   storage_permissions: rw
 
   # Environment variables.
-  environment_variables: []
+  environment_variables:
+    - name: CZKAWKA_GUI_KROKIET
+      description: >-
+        Setting this to `1` enables Krokiet, the new Czkawka frontend written in
+        Slint.
+      type: public
+      default: 0
+      unraid_template:
+        title: "Krokiet GUI"
+        description: >-
+          Setting this to "1" enables Krokiet, the new Czkawka frontend written
+          in Slint.
+        display: advanced
+        required: false
+        mask: false
 
   # Volumes
   volumes: []
