@@ -47,6 +47,7 @@ RUN add-pkg \
         libxkbcommon-x11 \
         # Needed to edit krokiet config.
         jq \
+        mesa-dri-gallium \
         moreutils \
         # For the file dialog support (via XDG Desktop Portal backend) of krokiet.
         # https://lib.rs/crates/rfd
