@@ -30,12 +30,4 @@ else
     jq -c -M '.dark_theme = true' /config/xdg/config/krokiet/config_general.json | sponge /config/xdg/config/krokiet/config_general.json
 fi
 
-# Adjust the main window selection.
-echo '<Type>normal</Type>' > /tmp/main-window-selection.xml
-if is-bool-val-true "${CZKAWKA_GUI_KROKIET:-0}"; then
-    echo '<Name>krokiet</Name>' >> /tmp/main-window-selection.xml
-else
-    echo '<Name>czkawka_gui</Name>' >> /tmp/main-window-selection.xml
-fi
-
-# vim: set ft=sh :
+# vim:ft=sh:ts=4:sw=4:et:sts=4
