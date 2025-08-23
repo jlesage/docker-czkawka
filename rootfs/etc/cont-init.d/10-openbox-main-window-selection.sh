@@ -11,7 +11,7 @@ echo '<Type>normal</Type>' > /tmp/main-window-selection.xml
 if is-bool-val-true "${CZKAWKA_GUI_KROKIET:-0}"; then
     echo '<Name>krokiet</Name>' >> /tmp/main-window-selection.xml
 else
-    echo '<Name>czkawka_gui</Name>' >> /tmp/main-window-selection.xml
+    echo '<Title>Czkawka *</Title>' >> /tmp/main-window-selection.xml
 fi
 
 # vim:ft=sh:ts=4:sw=4:et:sts=4

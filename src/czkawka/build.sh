@@ -16,6 +16,9 @@ if [ -z "$CZKAWKA_URL" ]; then
     exit 1
 fi
 
+SLINT_VERSION=1.12.1
+SLINT_URL=https://github.com/slint-ui/slint/archive/refs/tags/v${SLINT_VERSION}.tar.gz
+
 #
 # Install required packages.
 #
@@ -91,6 +94,8 @@ curl -# -L -f ${CZKAWKA_URL} | tar xz --strip 1 -C /tmp/czkawka
 mkdir /tmp/czkawka/.cargo
 echo "[profile.release]" >> /tmp/czkawka/.cargo/config.toml
 echo "strip = true" >> /tmp/czkawka/.cargo/config.toml
+echo "debug = false" >> /tmp/czkawka/.cargo/config.toml
+echo "overflow-checks = true" >> /tmp/czkawka/.cargo/config.toml
 echo "opt-level = 's'" >> /tmp/czkawka/.cargo/config.toml
 echo "lto = 'thin'" >> /tmp/czkawka/.cargo/config.toml
 echo "panic = 'unwind'" >> /tmp/czkawka/.cargo/config.toml
@@ -108,6 +113,17 @@ for PATCH in $PATCHES; do
     patch  -p1 -d /tmp/czkawka < "$SCRIPT_DIR"/"$PATCH"
 done
 
+# Revert change made in Slint that disables musl compilation.
+# See https://github.com/slint-ui/slint/pull/8450
+[ -f /tmp/czkawka/Cargo.toml ]
+echo '
+[patch.crates-io]
+slint = { path = "/tmp/slint/api/rs/slint" }
+' >> /tmp/czkawka/Cargo.toml
+mkdir /tmp/slint
+curl -# -L -f "$SLINT_URL" | tar xz --strip 1 -C /tmp/slint
+patch -p1 -d /tmp/slint < "$SCRIPT_DIR"/slint-musl.patch
+
 log "Compiling Czkawka CLI..."
 (
     cd /tmp/czkawka
@@ -117,9 +133,6 @@ log "Compiling Czkawka CLI..."
 )
 
 log "Compiling Czkawka GUI..."
-# NOTE: When not installing Rust from the Alpine repository, we must compile
-#       with `RUSTFLAGS="-C target-feature=-crt-static"` to avoid crash during
-#       GTK initialization.  See https://github.com/qarmin/czkawka/issues/416.
 (
     cd /tmp/czkawka
     # shared-mime-info.pc is under /usr/share/pkgconfig.
