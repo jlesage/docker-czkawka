@@ -23,6 +23,10 @@ app:
     category: "Tools:"
   documentation:
   changelog:
+    - version: 25.12.4
+      date: 2025-12-15
+      changes:
+        - 'Fixed file dialog not opening under Krokiet.'
     - version: 25.12.3
       date: 2025-12-07
       changes:
