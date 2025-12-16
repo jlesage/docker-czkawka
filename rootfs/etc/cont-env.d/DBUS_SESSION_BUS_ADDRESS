@@ -1,2 +1,0 @@
-#!/bin/sh
-echo "unix:path=/tmp/dbus"
