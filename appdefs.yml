@@ -224,7 +224,7 @@ app:
     - version: 22.12.2
       date: 2022-12-11
       changes:
-        - 'Implemented workaround for issue seen with Synology devices where container would not start after an image update.  The problem is caused by Synology explicitly setting all environment variables and keeping values from the old version.'
+        - 'Implemented workaround for issue seen with Synology devices where container would not start after an image update. The problem is caused by Synology explicitly setting all environment variables and keeping values from the old version.'
     - version: 22.12.1
       date: 2022-12-01
       changes:
@@ -305,9 +305,6 @@ container:
       default: 0
       unraid_template:
         title: "Krokiet GUI"
-        description: >-
-          Setting this to "1" enables Krokiet, the new Czkawka frontend written
-          in Slint.
         display: advanced
         required: false
         mask: false
