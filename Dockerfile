@@ -9,9 +9,11 @@ ARG DOCKER_IMAGE_VERSION=
 
 # Define software versions.
 ARG CZKAWKA_VERSION=11.0.0
+ARG LIBHEIF_VERSION=1.21.2
 
 # Define software download URLs.
 ARG CZKAWKA_URL=https://github.com/qarmin/czkawka/archive/${CZKAWKA_VERSION}.tar.gz
+ARG LIBHEIF_URL=https://github.com/strukturag/libheif/releases/download/v${LIBHEIF_VERSION}/libheif-${LIBHEIF_VERSION}.tar.gz
 
 # Get Dockerfile cross-compilation helpers.
 FROM --platform=$BUILDPLATFORM tonistiigi/xx AS xx
@@ -20,9 +22,10 @@ FROM --platform=$BUILDPLATFORM tonistiigi/xx AS xx
 FROM --platform=$BUILDPLATFORM alpine:3.20 AS czkawka
 ARG TARGETPLATFORM
 ARG CZKAWKA_URL
+ARG LIBHEIF_URL
 COPY --from=xx / /
 COPY src/czkawka /build
-RUN /build/build.sh "$CZKAWKA_URL"
+RUN /build/build.sh "$CZKAWKA_URL" "$LIBHEIF_URL"
 RUN xx-verify \
     /tmp/czkawka-install/czkawka_cli \
     /tmp/czkawka-install/czkawka_gui
@@ -54,8 +57,7 @@ RUN add-pkg \
         xdg-desktop-portal-gtk \
         adwaita-icon-theme \
         && \
-    add-pkg --repository http://dl-cdn.alpinelinux.org/alpine/v3.21/community \
-        libheif
+    true
 
 # Generate and install favicons.
 RUN \
@@ -67,6 +69,7 @@ COPY rootfs/ /
 COPY --from=czkawka /tmp/czkawka-install/czkawka_cli /usr/bin/
 COPY --from=czkawka /tmp/czkawka-install/czkawka_gui /usr/bin/
 COPY --from=czkawka /tmp/czkawka-install/krokiet /usr/bin/
+COPY --from=czkawka /tmp/libheif-install/usr/lib /usr/lib
 
 # Set internal environment variables.
 RUN \

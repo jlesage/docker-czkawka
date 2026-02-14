@@ -17,12 +17,17 @@ log() {
 }
 
 CZKAWKA_URL="$1"
+LIBHEIF_URL="$2"
 
 if [ -z "$CZKAWKA_URL" ]; then
     log "ERROR: Czkawka URL missing."
     exit 1
 fi
 
+if [ -z "$LIBHEIF_URL" ]; then
+    log "ERROR: libheif URL missing."
+    exit 1
+fi
 
 #
 # Install required packages.
@@ -32,6 +37,8 @@ apk --no-cache add \
     curl \
     git \
     clang \
+    cmake \
+    make \
     g++ \
     lld \
     patch \
@@ -42,8 +49,14 @@ xx-apk --no-cache --no-scripts add \
     gcc \
     libstdc++-dev \
     gtk4.0-dev \
-    libheif-dev \
 
+# For libheif.
+xx-apk --no-cache --no-scripts add \
+    libde265-dev \
+    x265-dev \
+    aom-dev \
+    libjpeg-turbo-dev \
+    libpng-dev \
 
 # Install Rust.
 # NOTE: Czkawka often requires a recent version of Rust that is not available
@@ -93,6 +106,48 @@ fi
 log "Downloading Czkawka..."
 mkdir /tmp/czkawka
 curl -# -L -f ${CZKAWKA_URL} | tar xz --strip 1 -C /tmp/czkawka
+
+log "Downloading libheif..."
+mkdir /tmp/libheif
+curl -# -L -f ${LIBHEIF_URL} | tar xz --strip 1 -C /tmp/libheif
+
+#
+# Compile libheif
+#
+
+log "Configuring libheif..."
+(
+    export CPPFLAGS="-O2"
+    export CXXFLAGS="-O2"
+    mkdir /tmp/libheif/build && \
+    cd /tmp/libheif/build && cmake \
+        $(xx-clang --print-cmake-defines) \
+        -DCMAKE_FIND_ROOT_PATH=$(xx-info sysroot) \
+        -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY \
+        -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY \
+        -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=ONLY \
+        -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=NEVER \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_BUILD_TYPE=None \
+        -DCMAKE_SKIP_INSTALL_RPATH=ON \
+        -DWITH_EXAMPLES=OFF \
+        -DWITH_GDK_PIXBUF=OFF \
+        -DBUILD_TESTING=OFF \
+        ..
+)
+
+log "Compiling libheif..."
+make -C /tmp/libheif/build -j$(nproc)
+
+log "Installing libheif..."
+make DESTDIR=$(xx-info sysroot) -C /tmp/libheif/build install
+find $(xx-info sysroot)usr/lib -name "*.la" -delete
+
+make DESTDIR=/tmp/libheif-install -C /tmp/libheif/build install
+find /tmp/libheif-install -name "*.la" -delete
+find /tmp/libheif-install -name "*.pc" -delete
+rm -r /tmp/libheif-install/usr/lib/cmake
+rm -r /tmp/libheif-install/usr/include
 
 #
 # Compile Czkawka.
