@@ -6,16 +6,16 @@
 -use std::env;
  use std::rc::Rc;
  
- use czkawka_core::common_traits::PrintResults;
-@@ -31,10 +30,7 @@
-     let notebook_main = gui_data.main_notebook.notebook_main.clone();
+ use gtk4::prelude::*;
+@@ -18,10 +17,7 @@
+     let common_tree_views = gui_data.main_notebook.common_tree_views.clone();
  
-     buttons_save.connect_clicked(move |_| {
--        let current_path = match env::current_dir() {
+     buttons_save.connect_clicked(move |buttons_save| {
+-        let mut current_path = match env::current_dir() {
 -            Ok(t) => t.to_string_lossy().to_string(),
 -            Err(_) => "__unknown__".to_string(),
 -        };
-+        let current_path = "/config".to_string();
-         let result = match to_notebook_main_enum(notebook_main.current_page().expect("Current page not set")) {
-             NotebookMainEnum::Duplicate => shared_duplication_state.borrow().as_ref().map(|x| x.save_all_in_one(&current_path, "results_duplicates")),
-             NotebookMainEnum::EmptyDirectories => shared_empty_folders_state
++        let mut current_path = "/config".to_string();
+         if ["Windows"].iter().any(|item| current_path.contains(item)) {
+             current_path = directories_next::UserDirs::new()
+                 .and_then(|d| d.desktop_dir().map(|d| d.to_string_lossy().to_string()))

@@ -5,7 +5,7 @@ set -u # Treat unset variables as an error.
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-function log {
+log() {
     echo ">>> $*"
 }
 
@@ -16,8 +16,6 @@ if [ -z "$CZKAWKA_URL" ]; then
     exit 1
 fi
 
-SLINT_VERSION=1.12.1
-SLINT_URL=https://github.com/slint-ui/slint/archive/refs/tags/v${SLINT_VERSION}.tar.gz
 
 #
 # Install required packages.
@@ -91,7 +89,7 @@ curl -# -L -f ${CZKAWKA_URL} | tar xz --strip 1 -C /tmp/czkawka
 
 # Create cargo profile.
 # https://github.com/johnthagen/min-sized-rust
-mkdir /tmp/czkawka/.cargo
+echo "" >> /tmp/czkawka/.cargo/config.toml
 echo "[profile.release]" >> /tmp/czkawka/.cargo/config.toml
 echo "strip = true" >> /tmp/czkawka/.cargo/config.toml
 echo "debug = false" >> /tmp/czkawka/.cargo/config.toml
@@ -112,17 +110,6 @@ for PATCH in $PATCHES; do
     log "Applying $PATCH..."
     patch  -p1 -d /tmp/czkawka < "$SCRIPT_DIR"/"$PATCH"
 done
-
-# Revert change made in Slint that disables musl compilation.
-# See https://github.com/slint-ui/slint/pull/8450
-[ -f /tmp/czkawka/Cargo.toml ]
-echo '
-[patch.crates-io]
-slint = { path = "/tmp/slint/api/rs/slint" }
-' >> /tmp/czkawka/Cargo.toml
-mkdir /tmp/slint
-curl -# -L -f "$SLINT_URL" | tar xz --strip 1 -C /tmp/slint
-patch -p1 -d /tmp/slint < "$SCRIPT_DIR"/slint-musl.patch
 
 log "Compiling Czkawka CLI..."
 (
