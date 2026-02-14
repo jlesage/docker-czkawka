@@ -22,6 +22,18 @@ app:
     support_url: https://forums.unraid.net/topic/101459-support-czkawka/
     category: "Tools:"
   documentation:
+    sections:
+      - title: Trash Directory
+        level: 2
+        content: |-
+         When trash usage is enabled in {{ app.friendly_name }} settings, deleted files are
+         moved to the trash directory located at `/config/xdg/data/Trash` inside the
+         container.
+
+         > [!NOTE]
+         > Using the trash may be slower than permanent deletion, especially for large
+         > files, because the operation involves copying the file to the trash directory
+         > before removing the original.
   changelog:
     - version: 26.01.1
       date: 2026-01-04

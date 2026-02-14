@@ -8,7 +8,7 @@ export CXX=xx-clang++
 
 export RUSTFLAGS="-C link-args=-Wl,-zstack-size="8388608
 
-CZKAWKA_FEATURES="heif,libraw"
+CZKAWKA_FEATURES="container_trash,heif,libraw"
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
@@ -170,7 +170,7 @@ PATCHES="
     main-window-maximized.patch
     hide-title-buttons.patch
     results_location.patch
-    disable_trash.patch
+    container-trash.patch
 "
 for PATCH in $PATCHES; do
     log "Applying $PATCH..."

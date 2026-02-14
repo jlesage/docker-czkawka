@@ -1,0 +1,153 @@
+--- a/czkawka_core/Cargo.toml
++++ b/czkawka_core/Cargo.toml
+@@ -14,6 +14,7 @@ build = "build.rs"
+ humansize = "2.1"
+ rayon = "1.10"
+ crossbeam-channel = "0.5"
++chrono = "0.4.38"
+ 
+ # For stable iteration over hashmaps.
+ indexmap = "2.11"
+@@ -129,5 +130,7 @@ blake_pure = ["blake3/pure"]
+ # Allows to use trash on Linux when using xdg-portal, needed by e.g. flatpak where normal trash access always fails
+ # No-op on other OSes, it is slower and provides less helpful error messages
+ xdg_portal_trash = ["ashpd", "tokio"]
++# Allows to use trash in a Docker container environment.
++container_trash = []
+ [lints]
+ workspace = true
+--- a/czkawka_core/src/common/mod.rs
++++ b/czkawka_core/src/common/mod.rs
+@@ -25,6 +25,9 @@ use std::sync::Mutex;
+ use std::time::Duration;
+ use std::{fs, io, thread};
+ 
++use std::env;
++use chrono::Utc;
++
+ use items::SingleExcludedItem;
+ use log::debug;
+ 
+@@ -153,6 +156,82 @@ pub fn check_if_folder_contains_only_empty_folders<P: AsRef<Path>>(path: P) -> R
+     Ok(())
+ }
+ 
++/// Generates a unique file name in the destination directory to avoid collisions
++fn unique_trash_path(files_dir: &Path, original_name: &std::ffi::OsStr) -> PathBuf {
++    let mut candidate = files_dir.join(original_name);
++    let mut counter = 1;
++
++    while candidate.exists() {
++        let new_name = format!(
++            "{}_{}",
++            original_name.to_string_lossy(),
++            counter
++        );
++        candidate = files_dir.join(new_name);
++        counter += 1;
++    }
++
++    candidate
++}
++
++/// Move a file to the trash using TRASH_DIR or XDG_DATA_HOME
++fn move_to_custom_trash(path: &Path) -> Result<(), String> {
++    if !path.exists() {
++        return Err("File does not exist".to_string());
++    }
++
++    let original_path = path
++        .canonicalize()
++        .map_err(|e| e.to_string())?;
++
++    // Determine trash directories
++    let (files_dir, info_dir) = {
++        if let Ok(dir) = env::var("TRASH_DIR") {
++            let trash_path = PathBuf::from(dir);
++            let files_dir = trash_path.join("files");
++            let info_dir = trash_path.join("info");
++            fs::create_dir_all(&files_dir).map_err(|e| e.to_string())?;
++            fs::create_dir_all(&info_dir).map_err(|e| e.to_string())?;
++            (files_dir, info_dir)
++        }
++        else if let Ok(xdg) = env::var("XDG_DATA_HOME") {
++            let trash_path = PathBuf::from(xdg).join("Trash");
++            let files_dir = trash_path.join("files");
++            let info_dir = trash_path.join("info");
++            fs::create_dir_all(&files_dir).map_err(|e| e.to_string())?;
++            fs::create_dir_all(&info_dir).map_err(|e| e.to_string())?;
++            (files_dir, info_dir)
++        } else {
++            return Err("Cannot determine trash location".to_string());
++        }
++    };
++
++    // Destination file path
++    let file_name = path
++        .file_name()
++        .ok_or_else(|| "Invalid path".to_string())?;
++    let dest_file = unique_trash_path(&files_dir, file_name);
++
++    // Move file (rename), fallback to copy+delete
++    if let Err(_) = fs::rename(path, &dest_file) {
++        fs::copy(path, &dest_file).map_err(|e| e.to_string())?;
++        fs::remove_file(path).map_err(|e| e.to_string())?;
++    }
++
++    // Write .trashinfo metadata
++    let info_file_name = format!("{}.trashinfo", dest_file.file_name().unwrap().to_string_lossy());
++    let info_file = info_dir.join(info_file_name);
++    let deletion_date = Utc::now().format("%Y-%m-%dT%H:%M:%S").to_string();
++    let metadata = format!(
++        "[Trash Info]\nPath={}\nDeletionDate={}\n",
++        original_path.display(),
++        deletion_date
++    );
++    fs::write(info_file, metadata).map_err(|e| e.to_string())?;
++
++    Ok(())
++}
++
+ /// A wrapper around `trash::delete`. Note that for platforms that do not have native trash support
+ /// (Android, iOS), this function will always return an [`Error`]. When the `xdg_portal_trash` feature is
+ /// enabled, the portal-based implementation will only be used on Linux; on other desktop OSes the
+@@ -160,11 +239,16 @@ pub fn check_if_folder_contains_only_empty_folders<P: AsRef<Path>>(path: P) -> R
+ fn trash_delete<P: AsRef<Path>>(path: P) -> Result<(), String> {
+     let path = path.as_ref();
+ 
+-    #[cfg(not(any(target_os = "android", target_os = "ios", all(feature = "xdg_portal_trash", target_os = "linux"))))]
++    #[cfg(not(any(target_os = "android", target_os = "ios", all(feature = "xdg_portal_trash", target_os = "linux"), all(feature = "container_trash", target_os = "linux"))))]
+     {
+         trash::delete(path).map_err(|err| err.to_string())
+     }
+ 
++    #[cfg(all(feature = "container_trash", target_os = "linux"))]
++    {
++        move_to_custom_trash(path)
++    }
++
+     #[cfg(all(feature = "xdg_portal_trash", target_os = "linux"))]
+     {
+         use std::os::fd::AsFd;
+--- a/czkawka_gui/Cargo.toml
++++ b/czkawka_gui/Cargo.toml
+@@ -57,6 +57,8 @@ libavif = ["czkawka_core/libavif"]
+ # Allows to use trash on Linux when using xdg-portal, needed by e.g. flatpak where normal trash access always fails
+ # No-op on other OSes, it is slower and provides less helpful error messages
+ xdg_portal_trash = ["czkawka_core/xdg_portal_trash"]
++# Allows to use trash in a Docker container environment.
++container_trash = ["czkawka_core/container_trash"]
+ add_windows_icon = []
+ 
+ [lints]
+--- a/krokiet/Cargo.toml
++++ b/krokiet/Cargo.toml
+@@ -72,6 +72,8 @@ libavif = ["czkawka_core/libavif"]
+ # Allows to use trash on Linux when using xdg-portal, needed by e.g. flatpak where normal trash access always fails
+ # No-op on other OSes, it is slower and provides less helpful error messages
+ xdg_portal_trash = ["czkawka_core/xdg_portal_trash"]
++# Allows to use trash in a Docker container environment.
++container_trash = ["czkawka_core/container_trash"]
+ 
+ [lints]
+ workspace = true

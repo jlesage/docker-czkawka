@@ -57,6 +57,7 @@ unnecessary files from your computer.
    * [Web Notifications](#web-notifications)
    * [GPU Acceleration Support](#gpu-acceleration-support)
    * [Shell Access](#shell-access)
+   * [Trash Directory](#trash-directory)
    * [Support or Contact](#support-or-contact)
 
 ## Quick Start
@@ -743,6 +744,17 @@ docker exec -ti CONTAINER sh
 
 Where `CONTAINER` is the ID or the name of the container used during its
 creation.
+
+## Trash Directory
+
+When trash usage is enabled in Czkawka settings, deleted files are
+moved to the trash directory located at `/config/xdg/data/Trash` inside the
+container.
+
+> [!NOTE]
+> Using the trash may be slower than permanent deletion, especially for large
+> files, because the operation involves copying the file to the trash directory
+> before removing the original.
 
 ## Support or Contact
 
