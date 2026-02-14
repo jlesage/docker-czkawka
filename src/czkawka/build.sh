@@ -171,6 +171,7 @@ PATCHES="
     hide-title-buttons.patch
     results_location.patch
     container-trash.patch
+    dark-theme.patch
 "
 for PATCH in $PATCHES; do
     log "Applying $PATCH..."

@@ -18,16 +18,6 @@ echo > /etc/fstab
     cp /defaults/recently-used.xbel /config/xdg/data/recently-used.xbel
 }
 
-[ -f /config/xdg/config/krokiet/config_general.json ] || {
-    mkdir -p /config/xdg/config/krokiet
-    cp /defaults/config_general.json /config/xdg/config/krokiet/
-}
 
-# Handle dark mode (for krokiet).
-if is-bool-val-false "${DARK_MODE:-0}"; then
-    jq -c -M '.dark_theme = false' /config/xdg/config/krokiet/config_general.json | sponge /config/xdg/config/krokiet/config_general.json
-else
-    jq -c -M '.dark_theme = true' /config/xdg/config/krokiet/config_general.json | sponge /config/xdg/config/krokiet/config_general.json
-fi
 
 # vim:ft=sh:ts=4:sw=4:et:sts=4

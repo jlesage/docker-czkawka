@@ -1,0 +1,66 @@
+#
+# Dark theme support for container environment:
+#  - Remove the ability to configure the dark theme from Krokiet UI.
+#  - State of the dark theme is taken from the DARK_MODE environment variable,
+#    instead of the config file..
+#
+--- a/krokiet/src/settings/mod.rs
++++ b/krokiet/src/settings/mod.rs
+@@ -4,6 +4,7 @@ pub(crate) mod model;
+ use std::cmp::{max, min};
+ use std::collections::BTreeMap;
+ use std::path::PathBuf;
++use std::env;
+ 
+ use czkawka_core::TOOLS_NUMBER;
+ use czkawka_core::common::basic_gui_cli::CliResult;
+@@ -252,6 +253,14 @@ pub(crate) fn get_config_file(number: i32) -> Option<PathBuf> {
+     Some(config_file)
+ }
+ 
++fn get_dark_theme() -> bool {
++    ["1", "true", "enable", "enabled", "yes", "on", "y"]
++        .contains(&env::var("DARK_MODE")
++            .unwrap_or_default()
++            .to_lowercase()
++            .as_str())
++}
++
+ pub(crate) fn set_base_settings_to_gui(app: &MainWindow, basic_settings: &BasicSettings, preset_idx: i32) {
+     let settings = app.global::<Settings>();
+     change_language(app);
+@@ -265,7 +274,7 @@ pub(crate) fn set_base_settings_to_gui(app: &MainWindow, basic_settings: &BasicS
+     if basic_settings.settings_load_windows_size_at_startup {
+         app.window().set_size(WindowSize::Physical(PhysicalSize { width, height }));
+     }
+-    settings.set_dark_theme(basic_settings.dark_theme);
++    settings.set_dark_theme(get_dark_theme());
+     settings.set_show_only_icons(basic_settings.show_only_icons);
+     app.global::<Callabler>().invoke_theme_changed();
+     settings.set_load_tabs_sizes_at_startup(basic_settings.settings_load_tabs_sizes_at_startup);
+@@ -819,7 +828,7 @@ pub(crate) fn collect_base_settings(app: &MainWindow) -> BasicSettings {
+     assert_eq!(preset_names.len(), PRESET_NUMBER);
+     let language = combo_box_items.language.config_name;
+     // let language = LANGUAGE_LIST[lang_idx as usize].short_name.to_string();
+-    let dark_theme = settings.get_dark_theme();
++    let dark_theme = get_dark_theme();
+     let show_only_icons = settings.get_show_only_icons();
+ 
+     let settings_load_tabs_sizes_at_startup = settings.get_load_tabs_sizes_at_startup();
+--- a/krokiet/ui/settings_list.slint
++++ b/krokiet/ui/settings_list.slint
+@@ -278,14 +278,6 @@ export component SettingsList inherits VerticalLayout {
+                 height: SettingsSize.item_height;
+             }
+ 
+-            CheckBoxComponent {
+-                name <=> Translations.settings_dark_theme_text;
+-                model <=> Settings.dark_theme;
+-                toggled => {
+-                    Callabler.theme_changed();
+-                }   
+-            }
+-
+             CheckBoxComponent {
+                 name <=> Translations.settings_show_only_icons_text;
+                 model <=> Settings.show_only_icons;

@@ -48,9 +48,6 @@ RUN add-pkg \
         ffplay \
         # For krokiet support.
         libxkbcommon-x11 \
-        # Needed to edit krokiet config.
-        jq \
-        moreutils \
         # For the file dialog support (via XDG Desktop Portal backend) of krokiet.
         # https://lib.rs/crates/rfd
         dbus \
