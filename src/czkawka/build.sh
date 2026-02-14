@@ -3,6 +3,13 @@
 set -e # Exit immediately if a command exits with a non-zero status.
 set -u # Treat unset variables as an error.
 
+export CC=xx-clang
+export CXX=xx-clang++
+
+export RUSTFLAGS="-C link-args=-Wl,-zstack-size="8388608
+
+CZKAWKA_FEATURES="heif,libraw"
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 log() {
@@ -37,10 +44,6 @@ xx-apk --no-cache --no-scripts add \
     gtk4.0-dev \
     libheif-dev \
 
-CZKAWKA_FEATURES="heif"
-if ! xx-info is-cross; then
-    CZKAWKA_FEATURES="$CZKAWKA_FEATURES,libraw"
-fi
 
 # Install Rust.
 # NOTE: Czkawka often requires a recent version of Rust that is not available
@@ -61,18 +64,26 @@ else
     #       with `RUSTFLAGS="-C target-feature=-crt-static"` to avoid crash
     #       during GTK initialization.
     #       See https://github.com/qarmin/czkawka/issues/416.
-    export RUSTFLAGS="-C target-feature=-crt-static"
+    export RUSTFLAGS="$RUSTFLAGS -C target-feature=-crt-static"
 fi
 
-# Fix the xx-cargo setup.  See https://github.com/tonistiigi/xx/issues/104.
+# Fix the xx-cargo setup. See https://github.com/tonistiigi/xx/issues/104.
+# When building linux/arm/v6, there is a mismatch in triples:
+#   - cargo: arm-unknown-linux-musleabi
+#   - xx-info: armv6-alpine-linux-musleabihf.
 if xx-info is-cross; then
     xx-cargo --setup-target-triple
     if [ ! -e "/$(xx-cargo --print-target-triple)" ]; then
         ln -s "$(xx-info)" "/$(xx-cargo --print-target-triple)"
     fi
-    if [ ! -e "$(xx-info sysroot)/usr/lib/gcc/$(xx-cargo --print-target-triple)" ]; then
-        ln -s "$(xx-info)" "$(xx-info sysroot)/usr/lib/gcc/$(xx-cargo --print-target-triple)"
-    fi
+
+    for d in $(find $(xx-info sysroot) -name "$(xx-info)" -type d); do
+        cargo_d="$(dirname "$d")/$(xx-cargo --print-target-triple)"
+        [ ! -e "$cargo_d" ] || continue
+
+        log "xx-cargo setup fix: creating symlink '$cargo_d', pointing '$(xx-info)'."
+        ln -s "$(xx-info)" "$cargo_d"
+    done
 fi
 
 #
