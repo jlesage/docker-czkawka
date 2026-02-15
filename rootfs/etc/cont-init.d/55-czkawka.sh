@@ -18,6 +18,10 @@ echo > /etc/fstab
     cp /defaults/recently-used.xbel /config/xdg/data/recently-used.xbel
 }
 
+[ -f "$XDG_CACHE_HOME"/czkawka/krokiet_info_dialog_seen.txt ] || {
+    mkdir -p "$XDG_CACHE_HOME"/czkawka
+    cp /defaults/krokiet_info_dialog_seen.txt "$XDG_CACHE_HOME"/czkawka/
+}
 
 
 # vim:ft=sh:ts=4:sw=4:et:sts=4

@@ -1,0 +1,1 @@
+This file indicates that user has seen Krokiet info dialog. You can delete this file to see the dialog again.
