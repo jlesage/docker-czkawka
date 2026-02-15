@@ -53,6 +53,8 @@ RUN add-pkg \
         dbus \
         xdg-desktop-portal-gtk \
         adwaita-icon-theme \
+        # For opening folders.
+        pcmanfm \
         && \
     true
 
