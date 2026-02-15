@@ -18,6 +18,11 @@ echo > /etc/fstab
     cp /defaults/recently-used.xbel /config/xdg/data/recently-used.xbel
 }
 
+[ -f "$XDG_CONFIG_HOME"/gtk-3.0/bookmarks ] || {
+    mkdir -p "$XDG_CONFIG_HOME"/gtk-3.0/
+    cp /defaults/bookmarks "$XDG_CONFIG_HOME"/gtk-3.0/
+}
+
 [ -f "$XDG_CACHE_HOME"/czkawka/krokiet_info_dialog_seen.txt ] || {
     mkdir -p "$XDG_CACHE_HOME"/czkawka
     cp /defaults/krokiet_info_dialog_seen.txt "$XDG_CACHE_HOME"/czkawka/
