@@ -169,6 +169,7 @@ log "Patching Czkawka..."
 PATCHES="
     main-window-maximized.patch
     hide-title-buttons.patch
+    similar-video-panic-fix.patch
     results_location.patch
     container-trash.patch
     dark-theme.patch
