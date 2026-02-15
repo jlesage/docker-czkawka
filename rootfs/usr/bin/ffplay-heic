@@ -1,0 +1,46 @@
+#!/bin/sh
+
+set -e # Exit immediately if a command exits with a non-zero status.
+set -u # Treat unset variables as an error.
+
+original_file=
+converted_file="$(mktemp -u).jpg"
+
+# Ensure the temporary file is removed on exit / interruption.
+cleanup() {
+    rm -f "$converted_file"
+}
+trap cleanup EXIT
+
+# Replace the last argument, which is the file to be played.
+if [ "$#" -gt 0 ]; then
+    # Loop through arguments until the last one. Each argument is pop'ed and
+    # pushed back to the list.
+    count="$#"
+    while [ "$count" -gt 1 ]; do
+        set -- "$@" "$1"
+        shift
+        count=$((count - 1))
+    done
+
+    # Now $1 is the last argument.
+
+    # Keep the orginal file path.
+    original_file="$1"
+
+    # Replace argument with the converted file.
+    shift
+    set -- "$@" "$converted_file"
+fi
+
+# Convert HEIC/HEIF to JPEG.
+heif-convert \
+    --quiet \
+    --quality 80 \
+    --codec-threads $(nproc) \
+    --output "$converted_file" "$original_file"
+
+# Play with ffplay.
+ffplay "$@"
+
+# vim:ft=sh:ts=4:sw=4:et:sts=4

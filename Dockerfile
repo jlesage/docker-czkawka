@@ -69,6 +69,8 @@ COPY --from=czkawka /tmp/czkawka-install/czkawka_cli /usr/bin/
 COPY --from=czkawka /tmp/czkawka-install/czkawka_gui /usr/bin/
 COPY --from=czkawka /tmp/czkawka-install/krokiet /usr/bin/
 COPY --from=czkawka /tmp/libheif-install/usr/lib /usr/lib
+COPY --from=czkawka /tmp/libheif-install/usr/bin/heif-convert /usr/bin/
+COPY --from=czkawka /tmp/libheif-install/usr/bin/heif-dec /usr/bin/
 
 # Set internal environment variables.
 RUN \

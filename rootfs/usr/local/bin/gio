@@ -6,14 +6,49 @@
 # higher priority than /usr/bin (the original location of gio).
 #
 
+get_file_ext() {
+    filename=$1
+
+    # Get extension.
+    extension="${filename##*.}"
+
+    # Return now if there is no extension or filename starts with a dot.
+    if [ "$extension" = "$filename" ] || [ -z "$extension" ]; then
+        return
+    fi
+
+    # Convert extension to lowercase.
+    lowercased_extension=$(printf "%s" "$extension" | tr '[:upper:]' '[:lower:]')
+
+    echo "$lowercased_extension"
+}
+
 if [ "${1:-}" = "open" ] && [ -f "$2" ]; then
-    if ffprobe -v error -show_entries stream=codec_type -of csv=p=0 "$2" >/dev/null 2>&1; then
+    # Get extension of the filename.
+    file_ext="$(get_file_ext "$2")"
+
+    ffplay=
+
+    case "$file_ext" in
+        heic|heif)
+            # Special case for HEIC/HEIF files: they are not supported by
+            # ffplay. Use a wrapper to play a converted version instead.
+            ffplay="ffplay-heic"
+            ;;
+        *)
+            if ffprobe -v error -show_entries stream=codec_type -of csv=p=0 "$2" >/dev/null 2>&1; then
+                ffplay="ffplay"
+            fi
+            ;;
+    esac
+
+    if [ -n "$ffplay" ]; then
         # This is a video or audio file.  Start playing with with ffplay.
         # Use the current screen size to determine the size of the ffplay window.
         DISPLAY_SIZE="$(obxprop --root | grep "^_NET_DESKTOP_GEOMETRY" | cut -d'=' -f2 | tr -d ',' | awk '{print $1; print $2}')"
         X="$(echo "$DISPLAY_SIZE" | head -n1)"
         Y="$(echo "$DISPLAY_SIZE" | tail -n1)"
-       exec ffplay -loglevel quiet -x "$(expr "$X" / 2)" -y "$(expr "$Y" / 2)" "$2" 2>/dev/null
+        exec $ffplay -loglevel quiet -x "$((X / 2))" -y "$((Y / 2))" "$2" 2>/dev/null
     fi
 elif [ "${1:-}" = "open" ] && [ -d "$2" ]; then
     # We are trying to open a folder.

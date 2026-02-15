@@ -130,7 +130,7 @@ log "Configuring libheif..."
         -DCMAKE_INSTALL_PREFIX=/usr \
         -DCMAKE_BUILD_TYPE=None \
         -DCMAKE_SKIP_INSTALL_RPATH=ON \
-        -DWITH_EXAMPLES=OFF \
+        -DWITH_EXAMPLES=ON \
         -DWITH_GDK_PIXBUF=OFF \
         -DBUILD_TESTING=OFF \
         ..
