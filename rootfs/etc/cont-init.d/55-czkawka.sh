@@ -13,9 +13,9 @@ fi
 # folder to add.
 echo > /etc/fstab
 
-[ -f /config/xdg/data/recently-used.xbel ] || {
-    mkdir -p /config/xdg/data
-    cp /defaults/recently-used.xbel /config/xdg/data/recently-used.xbel
+[ -f "$XDG_DATA_HOME"/recently-used.xbel ] || {
+    mkdir -p "$XDG_DATA_HOME"
+    cp /defaults/recently-used.xbel "$XDG_DATA_HOME"/
 }
 
 [ -f "$XDG_CONFIG_HOME"/gtk-3.0/bookmarks ] || {
