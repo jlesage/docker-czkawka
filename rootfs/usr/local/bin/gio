@@ -1,26 +1,19 @@
 #!/bin/sh
 #
-# The gio binary is used for sending files to trash.  This script intercept the
-# trash functionality so it can work in a Docker environment.
+# The gio binary is used to open files.
 #
 # Note that this script must be located under /usr/local/bin, a path with a
 # higher priority than /usr/bin (the original location of gio).
 #
 
-if [ "${1:-}" = "trash" ]; then
-    # Intercept the trash functionality.
-    shift
-    mv "$@" /trash/
-else
-    if [ "${1:-}" = "open" ] && [ -f "$2" ]; then
-        if [ "$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_type -of csv=p=0 "$2" 2>/dev/null)" = "video" ]; then
-            # This is a video file.  Start playing with with ffplay.
-            # Use the current screen size to determine the size of the ffplay window.
-            DISPLAY_SIZE="$(obxprop --root | grep "^_NET_DESKTOP_GEOMETRY" | cut -d'=' -f2 | tr -d ',' | awk '{print $1; print $2}')"
-            X="$(echo "$DISPLAY_SIZE" | head -n1)"
-            Y="$(echo "$DISPLAY_SIZE" | tail -n1)"
-           exec ffplay -loglevel quiet -x "$(expr "$X" / 2)" -y "$(expr "$Y" / 2)" "$2" 2>/dev/null
-        fi
+if [ "${1:-}" = "open" ] && [ -f "$2" ]; then
+    if [ "$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_type -of csv=p=0 "$2" 2>/dev/null)" = "video" ]; then
+        # This is a video file.  Start playing with with ffplay.
+        # Use the current screen size to determine the size of the ffplay window.
+        DISPLAY_SIZE="$(obxprop --root | grep "^_NET_DESKTOP_GEOMETRY" | cut -d'=' -f2 | tr -d ',' | awk '{print $1; print $2}')"
+        X="$(echo "$DISPLAY_SIZE" | head -n1)"
+        Y="$(echo "$DISPLAY_SIZE" | tail -n1)"
+       exec ffplay -loglevel quiet -x "$(expr "$X" / 2)" -y "$(expr "$Y" / 2)" "$2" 2>/dev/null
     fi
-    exec /usr/bin/gio "$@"
 fi
+exec /usr/bin/gio "$@"
