@@ -171,7 +171,7 @@ PATCHES="
     hide-title-buttons.patch
     similar-video-panic-fix.patch
     excluded-dir-warning-fix.patch
-    results_location.patch
+    results-location.patch
     container-trash.patch
     dark-theme.patch
 "
