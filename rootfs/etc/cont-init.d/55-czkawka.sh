@@ -28,5 +28,10 @@ echo > /etc/fstab
     cp /defaults/krokiet_info_dialog_seen.txt "$XDG_CACHE_HOME"/czkawka/
 }
 
+if is-bool-val-true "${CZKAWKA_GUI_KROKIET:-0}"; then
+    echo "WARNING: The CZKAWKA_GUI_KROKIET environment variable is deprecated"
+    echo "         and no longer supported. To use Krokiet, please switch to"
+    echo "         its dedicated Docker image."
+fi
 
 # vim:ft=sh:ts=4:sw=4:et:sts=4

@@ -173,7 +173,6 @@ PATCHES="
     excluded-dir-warning-fix.patch
     results-location.patch
     container-trash.patch
-    dark-theme.patch
 "
 for PATCH in $PATCHES; do
     log "Applying $PATCH..."
@@ -196,17 +195,7 @@ log "Compiling Czkawka GUI..."
     xx-cargo build --release --bin czkawka_gui --features "$CZKAWKA_FEATURES"
 )
 
-log "Compiling Czkawka Krokiet GUI..."
-(
-    export SLINT_STYLE=fluent
-    cd /tmp/czkawka
-    # shared-mime-info.pc is under /usr/share/pkgconfig.
-    PKG_CONFIG_PATH=/$(xx-info)/usr/share/pkgconfig \
-    xx-cargo build --release --bin krokiet --features "$CZKAWKA_FEATURES"
-)
-
 log "Installing Czkawka..."
 mkdir /tmp/czkawka-install
 cp -v /tmp/czkawka/target/*/release/czkawka_cli /tmp/czkawka-install/
 cp -v /tmp/czkawka/target/*/release/czkawka_gui /tmp/czkawka-install/
-cp -v /tmp/czkawka/target/*/release/krokiet /tmp/czkawka-install/

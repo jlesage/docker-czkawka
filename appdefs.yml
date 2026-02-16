@@ -34,6 +34,24 @@ app:
          > Using the trash may be slower than permanent deletion, especially for large
          > files, because the operation involves copying the file to the trash directory
          > before removing the original.
+      - title: Krokiet
+        level: 2
+        content: |-
+          This container no longer includes Krokiet, the next-generation GUI frontend for
+          {{ app.friendly_name }}.
+
+          A dedicated container is now available specifically for running Krokiet. For
+          more details, see the
+          [Krokiet Docker container project](https://github.com/jlesage/krokiet).
+
+          As a result, the environment variable `CZKAWKA_GUI_KROKIET` is deprecated and
+          should no longer be used. It will be ignored in current and future releases.
+
+          > [!NOTE]
+          > Users who previously ran Krokiet within this container can seamlessly migrate
+          > to the new Krokiet container by updating the image to use. Container
+          > parameters are compatible between the two and keeping the same `/config`
+          > folder mapping preserves Krokiet settings and preferences.
   changelog:
     - version: 26.01.1
       date: 2026-01-04
@@ -308,18 +326,7 @@ container:
   storage_permissions: rw
 
   # Environment variables.
-  environment_variables:
-    - name: CZKAWKA_GUI_KROKIET
-      description: >-
-        Setting this to `1` enables Krokiet, the new Czkawka frontend written in
-        Slint.
-      type: public
-      default: 0
-      unraid_template:
-        title: "Krokiet GUI"
-        display: advanced
-        required: false
-        mask: false
+  environment_variables: []
 
   # Volumes
   volumes: []

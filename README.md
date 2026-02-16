@@ -58,6 +58,7 @@ unnecessary files from your computer.
    * [GPU Acceleration Support](#gpu-acceleration-support)
    * [Shell Access](#shell-access)
    * [Trash Directory](#trash-directory)
+   * [Krokiet](#krokiet)
    * [Support or Contact](#support-or-contact)
 
 ## Quick Start
@@ -142,7 +143,6 @@ the `-e` parameter in the format `<VARIABLE_NAME>=<VALUE>`.
 |`VNC_LISTENING_PORT`| Port used by the VNC server to serve the application's GUI. This port is internal to the container and typically does not need to be changed. By default, a container uses the default bridge network, requiring each internal port to be mapped to an external port (using the `-p` or `--publish` argument). If another network type is used, changing this port may prevent conflicts with other services/containers. **NOTE**: A value of `-1` disables VNC access to the application's GUI. | `5900` |
 |`VNC_PASSWORD`| Password required to connect to the application's GUI. See the [VNC Password](#vnc-password) section for details. | (no value) |
 |`ENABLE_CJK_FONT`| When set to `1`, installs the open-source font `WenQuanYi Zen Hei`, supporting a wide range of Chinese/Japanese/Korean characters. | `0` |
-|`CZKAWKA_GUI_KROKIET`| Setting this to `1` enables Krokiet, the new Czkawka frontend written in Slint. | `0` |
 
 #### Deployment Considerations
 
@@ -755,6 +755,24 @@ container.
 > Using the trash may be slower than permanent deletion, especially for large
 > files, because the operation involves copying the file to the trash directory
 > before removing the original.
+
+## Krokiet
+
+This container no longer includes Krokiet, the next-generation GUI frontend for
+Czkawka.
+
+A dedicated container is now available specifically for running Krokiet. For
+more details, see the
+[Krokiet Docker container project](https://github.com/jlesage/krokiet).
+
+As a result, the environment variable `CZKAWKA_GUI_KROKIET` is deprecated and
+should no longer be used. It will be ignored in current and future releases.
+
+> [!NOTE]
+> Users who previously ran Krokiet within this container can seamlessly migrate
+> to the new Krokiet container by updating the image to use. Container
+> parameters are compatible between the two and keeping the same `/config`
+> folder mapping preserves Krokiet settings and preferences.
 
 ## Support or Contact
 

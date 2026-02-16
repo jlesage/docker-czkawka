@@ -42,19 +42,15 @@ ARG DOCKER_IMAGE_VERSION
 # Install dependencies.
 RUN add-pkg \
         gtk4.0 \
-        font-dejavu \
         alsa-lib \
         ffmpeg \
         ffplay \
-        # For krokiet support.
-        libxkbcommon-x11 \
-        # For the file dialog support (via XDG Desktop Portal backend) of krokiet.
-        # https://lib.rs/crates/rfd
-        dbus \
-        xdg-desktop-portal-gtk \
-        adwaita-icon-theme \
         # For opening folders.
         pcmanfm \
+        # Icons for the file picker and file manager.
+        adwaita-icon-theme \
+        # A font is needed.
+        font-dejavu \
         && \
     true
 
@@ -67,7 +63,6 @@ RUN \
 COPY rootfs/ /
 COPY --from=czkawka /tmp/czkawka-install/czkawka_cli /usr/bin/
 COPY --from=czkawka /tmp/czkawka-install/czkawka_gui /usr/bin/
-COPY --from=czkawka /tmp/czkawka-install/krokiet /usr/bin/
 COPY --from=czkawka /tmp/libheif-install/usr/lib /usr/lib
 COPY --from=czkawka /tmp/libheif-install/usr/bin/heif-convert /usr/bin/
 COPY --from=czkawka /tmp/libheif-install/usr/bin/heif-dec /usr/bin/
@@ -79,10 +74,6 @@ RUN \
     set-cont-env DOCKER_IMAGE_VERSION "$DOCKER_IMAGE_VERSION" && \
     set-cont-env DISABLE_GLX 1 && \
     true
-
-# Set public environment variables.
-ENV \
-    CZKAWKA_GUI_KROKIET=0
 
 # Define mountable directories.
 VOLUME ["/storage"]
