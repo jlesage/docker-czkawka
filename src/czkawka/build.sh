@@ -170,6 +170,7 @@ PATCHES="
     main-window-maximized.patch
     hide-title-buttons.patch
     similar-video-panic-fix.patch
+    open-included-or-excluded-dir-panic-fix.patch
     excluded-dir-warning-fix.patch
     results-location.patch
     container-trash.patch
