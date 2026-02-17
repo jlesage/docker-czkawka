@@ -42,7 +42,7 @@ app:
 
           A dedicated container is now available specifically for running Krokiet. For
           more details, see the
-          [Krokiet Docker container project](https://github.com/jlesage/krokiet).
+          [Krokiet Docker container project](https://github.com/jlesage/docker-krokiet).
 
           As a result, the environment variable `CZKAWKA_GUI_KROKIET` is deprecated and
           should no longer be used. It will be ignored in current and future releases.
