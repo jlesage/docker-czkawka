@@ -53,6 +53,10 @@ app:
           > parameters are compatible between the two and keeping the same `/config`
           > folder mapping preserves Krokiet settings and preferences.
   changelog:
+    - version: 26.02.3
+      date: 2026-02-22
+      changes:
+        - 'Updated Czkawka to version 11.0.1.'
     - version: 26.02.2
       date: 2026-02-19
       changes:
