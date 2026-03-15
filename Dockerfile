@@ -52,6 +52,13 @@ RUN add-pkg \
         # A font is needed.
         font-dejavu \
         && \
+    # Fix for pcmanfm using "tab-new" icon, missing in Adwaita and hicolor themes.
+    add-pkg mate-icon-theme && \
+    cp /usr/share/icons/mate/16x16/actions/tab-new.png /usr/share/icons/hicolor/16x16/actions/ && \
+    cp /usr/share/icons/mate/22x22/actions/tab-new.png /usr/share/icons/hicolor/22x22/actions/ && \
+    cp /usr/share/icons/mate/24x24/actions/tab-new.png /usr/share/icons/hicolor/24x24/actions/ && \
+    del-pkg mate-icon-theme && \
+    gtk-update-icon-cache /usr/share/icons/hicolor && \
     true
 
 # Generate and install favicons.
