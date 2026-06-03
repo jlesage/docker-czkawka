@@ -1,6 +1,5 @@
 #!/bin/sh
 
-export HOME=/config
 export LIBGL_ALWAYS_SOFTWARE=true
 
 cd /storage
