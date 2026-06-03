@@ -43,12 +43,12 @@ if [ "${1:-}" = "open" ] && [ -f "$2" ]; then
     esac
 
     if [ -n "$ffplay" ]; then
-        # This is a video or audio file.  Start playing with with ffplay.
+        # This is a video or audio file. Start playing with with ffplay.
         # Use the current screen size to determine the size of the ffplay window.
         DISPLAY_SIZE="$(obxprop --root | grep "^_NET_DESKTOP_GEOMETRY" | cut -d'=' -f2 | tr -d ',' | awk '{print $1; print $2}')"
         X="$(echo "$DISPLAY_SIZE" | head -n1)"
         Y="$(echo "$DISPLAY_SIZE" | tail -n1)"
-        exec $ffplay -loglevel quiet -x "$((X / 2))" -y "$((Y / 2))" "$2" 2>/dev/null
+        exec "$ffplay" -loglevel quiet -x "$((X / 2))" -y "$((Y / 2))" "$2" 2>/dev/null
     fi
 elif [ "${1:-}" = "open" ] && [ -d "$2" ]; then
     # We are trying to open a folder.
