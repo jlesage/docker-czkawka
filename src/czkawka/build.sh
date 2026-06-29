@@ -8,7 +8,7 @@ export CXX=xx-clang++
 
 export RUSTFLAGS="-C link-args=-Wl,-zstack-size="8388608
 
-CZKAWKA_FEATURES="container_trash,heif,libraw"
+CZKAWKA_FEATURES="container_trash,heif,libraw,libavif"
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
@@ -49,6 +49,7 @@ xx-apk --no-cache --no-scripts add \
     gcc \
     libstdc++-dev \
     gtk4.0-dev \
+    dav1d-dev \
 
 # For libheif.
 xx-apk --no-cache --no-scripts add \

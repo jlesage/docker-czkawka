@@ -16,17 +16,18 @@
 +container_trash = []
  [lints]
  workspace = true
---- a/czkawka_core/src/common/mod.rs
-+++ b/czkawka_core/src/common/mod.rs
-@@ -25,6 +25,9 @@ use std::sync::Mutex;
- use std::time::Duration;
- use std::{fs, io, thread};
- 
+--- a/czkawka_core/src/common/fs_ops.rs
++++ b/czkawka_core/src/common/fs_ops.rs
+@@ -25,6 +25,10 @@ use std::sync::Mutex;
+ use std::io::Error;
+ use std::path::Path;
+ use std::{fs, io};
++
 +use std::env;
 +use chrono::Utc;
-+
- use items::SingleExcludedItem;
- use log::debug;
++use std::path::PathBuf;
+ 
+ use crate::flc;
  
 @@ -153,6 +156,82 @@ pub fn check_if_folder_contains_only_empty_folders<P: AsRef<Path>>(path: P) -> R
      Ok(())
@@ -137,9 +138,9 @@
  xdg_portal_trash = ["czkawka_core/xdg_portal_trash"]
 +# Allows to use trash in a Docker container environment.
 +container_trash = ["czkawka_core/container_trash"]
- add_windows_icon = []
  
  [lints]
+ workspace = true
 --- a/krokiet/Cargo.toml
 +++ b/krokiet/Cargo.toml
 @@ -72,6 +72,8 @@ libavif = ["czkawka_core/libavif"]
