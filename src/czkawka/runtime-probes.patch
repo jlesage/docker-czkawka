@@ -1,0 +1,22 @@
+Fix BuildRuntimeInfo logging in the GTK GUI.
+
+Upstream only calls BuildRuntimeInfo::get() (defaults, all runtime=false)
+and log_runtime_summary() without ever running detect_and_store() or
+start_background_probes(). That always prints:
+
+  Runtime probes: HEIF-HEVC=no HEIF-AV1=no LibRAW=no AVIF=no FFmpeg=no FFprobe=no
+
+Krokiet runs the probes correctly; the GTK frontend never did (12.0.1).
+Run detect_and_store() after image decoding hooks are registered so the
+summary reflects real runtime capability.
+--- a/czkawka_gui/src/main.rs
++++ b/czkawka_gui/src/main.rs
+@@ -74,7 +74,7 @@ pub const CZKAWKA_GTK_TOOL_NUMBER: usize = TOOLS_NUMBER - 3; // Missing exif, vid
+ 
+ fn main() {
+     register_image_decoding_hooks();
+-    czkawka_core::common::build_runtime_info::BuildRuntimeInfo::get();
++    czkawka_core::common::build_runtime_info::BuildRuntimeInfo::detect_and_store();
+     let config_cache_path_set_result = set_config_cache_path("Czkawka", "Czkawka");
+ 
+     // To remove info dialog about deprecated czkawka, remove exists_krokiet_info_file and set needs_to_open_dialog_about_krokiet to false

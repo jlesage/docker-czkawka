@@ -1,0 +1,12 @@
+Hide the "Try Krokiet" header button. This container ships Czkawka GTK only;
+Krokiet is available as a separate image.
+--- a/czkawka_gui/ui/main_window.ui
++++ b/czkawka_gui/ui/main_window.ui
+@@ -1212,6 +1212,7 @@
+             <property name="spacing">5</property>
+             <child>
+               <object class="GtkButton" id="button_krokiet">
++                <property name="visible">0</property>
+                 <property name="focusable">1</property>
+                 <property name="receives-default">1</property>
+                 <child>

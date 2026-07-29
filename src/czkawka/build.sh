@@ -170,8 +170,10 @@ log "Patching Czkawka..."
 PATCHES="
     main-window-maximized.patch
     hide-title-buttons.patch
+    hide-krokiet-button.patch
     results-location.patch
     container-trash.patch
+    runtime-probes.patch
 "
 for PATCH in $PATCHES; do
     log "Applying $PATCH..."
